@@ -14,6 +14,17 @@ class Student(User):
         cursor = cx.cursor()
 
         # Use parameterized queries to prevent SQL injection and handle types correctly
+        if Searchh_keyword.upper() == "CRN" :
+            Searchh_keyword = "CRN"
+        elif Searchh_keyword.upper() == "COURSE NAME" or Searchh_keyword.upper() == "TITLE":
+            Searchh_keyword = "TITLE"
+        
+        if type(search_value) == int:
+            search_value = str(search_value)
+        elif type(search_value) == str:
+            search_value = f"'{search_value}'"
+
+            
         query = f"SELECT * FROM COURSES WHERE {Searchh_keyword} = {search_value}"
         cursor.execute(query)
         rows = cursor.fetchall()
