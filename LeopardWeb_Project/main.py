@@ -6,7 +6,6 @@ import instructor
 import admin
 
 def main():
-    
     cx = sqlite3.connect("assignment3.db")
     cursor = cx.cursor()
 
@@ -34,13 +33,17 @@ def main():
     for row in rows:
         print(row)
         
-    cursbrior.execute("PRAGMA table_info(STUDENT);")
+    cursor.execute("PRAGMA table_info(STUDENT);")
     for col in cursor.fetchall():
         print(col)
     
     print("USING:", os.path.abspath("assignment3.db"))
     
-
+    student = student.Student("Hill","Hill",1)
+    student.search_courses("CRN", "2500")
+    
+    new_admin1 = admin.Admin("Boss","Man", 30003)
+    new_admin1.add_course()
 
 
 main()
