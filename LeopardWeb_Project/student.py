@@ -6,22 +6,22 @@ class Student(User):
     def __init__(self, in_firstName, in_lastName, in_id):
         User.__init__(self, in_firstName, in_lastName, in_id)
         
-    def search_courses(self, Searchh_keyword, search_value):
+    def search_courses(self, Search_keyword, search_value):
         cx = sqlite3.connect("assignment3.db")
         cursor = cx.cursor()
 
         # Use parameterized queries to prevent SQL injection
-        if Searchh_keyword.upper() == "CRN":
-            Searchh_keyword = "CRN"
-        elif Searchh_keyword.upper() in ["COURSE NAME", "TITLE"]:
-            Searchh_keyword = "TITLE"
+        if Search_keyword.upper() == "CRN":
+            Search_keyword = "CRN"
+        elif Search_keyword.upper() in ["COURSE NAME", "TITLE"]:
+            Search_keyword = "TITLE"
 
         if isinstance(search_value, int):
             search_value = str(search_value)
         elif isinstance(search_value, str):
             search_value = f"'{search_value}'"
 
-        query = f"SELECT * FROM COURSES WHERE {Searchh_keyword} = {search_value}"
+        query = (f"SELECT * FROM COURSES WHERE {Search_keyword} = {search_value}")
         cursor.execute(query)
         rows = cursor.fetchall()
 

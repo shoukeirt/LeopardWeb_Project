@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>adaee2fb-946d-4f79-8e48-10c3d65e6515</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>python_sqlite_programmers.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -27,6 +27,9 @@
     <Compile Include="python_sqlite_programmers.py" />
     <Compile Include="student.py" />
     <Compile Include="user.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assignment3.db" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
