@@ -1,39 +1,36 @@
-import sqlite3
+#Create Student_Schedule table on startup if not already in the database
+def create_student_schedule_table():
+    #connect to the database
+    database = sqlite3.connect("assignment3.db")
+    cursor = database.cursor()
 
-#connect to the database file
-database = sqlite3.connect("assignment3.db")
+    #SQL table definition
+    create_schedule_table = """
+    CREATE TABLE IF NOT EXISTS Student_Schedule (
+        StudentName TEXT PRIMARY KEY NOT NULL,
+        CRN INTEGER NOT NULL,
+        Course1 TEXT NOT NULL,
+        DOW1 TEXT NOT NULL,
+        Time1 TEXT NOT NULL,
+        Course2 TEXT,
+        DOW2 TEXT,
+        Time2 TEXT,
+        Course3 TEXT,
+        DOW3 TEXT,
+        Time3 TEXT,
+        Course4 TEXT,
+        DOW4 TEXT,
+        Time4 TEXT,
+        Course5 TEXT,
+        DOW5 TEXT,
+        Time5 TEXT
+    );
+    """
 
-#create a cursor object
-cursor = database.cursor()
+    #Student_Scedule – Student Name, CRN, Course1, DOW1, Time1, Course2, DOW2, Time2, Course3, DOW3, Time3, Course4, DOW4, Time4, Course5, DOW5, Time5	.
 
-#Create Student_Schedule table
-create_schedule_table = """
-CREATE TABLE IF NOT EXISTS Student_Schedule (
-    StudentName TEXT PRIMARY KEY NOT NULL,
-    CRN INTEGER NOT NULL,
-    Course1 TEXT NOT NULL,
-    DOW1 TEXT NOT NULL,
-    Time1 TEXT NOT NULL,
-    Course2 TEXT,
-    DOW2 TEXT,
-    Time2 TEXT,
-    Course3 TEXT,
-    DOW3 TEXT,
-    Time3 TEXT,
-    Course4 TEXT,
-    DOW4 TEXT,
-    Time4 TEXT,
-    Course5 TEXT,
-    DOW5 TEXT,
-    Time5 TEXT
-);
-"""
+    #Execute table creation and commit
+    cursor.execute(create_schedule_table)
+    database.commit()
+    database.close()
 
-#Student_Scedule – Student Name, CRN, Course1, DOW1, Time1, Course2, DOW2, Time2, Course3, DOW3, Time3, Course4, DOW4, Time4, Course5, DOW5, Time5	.
-
-#Execute table creation
-cursor.execute(create_schedule_table)
-
-#Commit changes and close the connection
-database.commit()
-database.close()
