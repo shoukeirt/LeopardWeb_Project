@@ -17,7 +17,6 @@ class Admin(User):
         new_title = input("What is the title of the course?")
         new_dep = input("What department is the new course in?")
         new_start = input("Enter time in HH:MM AM/PM format: ")
-        course = Course(new_crn, new_title, new_dep, time_start, new_days, new_sem, new_year, credits)
         try:
             time_start = datetime.datetime.strptime(new_start, "%I:%M %p").time()
             time_start_str = time_start.strftime("%H:%M:%S")
