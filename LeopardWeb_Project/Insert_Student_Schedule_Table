@@ -12,22 +12,26 @@ def create_student_schedule_table():
         Course1 TEXT NOT NULL,
         DOW1 TEXT NOT NULL,
         Time1 TEXT NOT NULL,
+        CRN INTEGER NOT NULL,
         Course2 TEXT,
         DOW2 TEXT,
         Time2 TEXT,
+        CRN INTEGER NOT NULL,
         Course3 TEXT,
         DOW3 TEXT,
         Time3 TEXT,
+        CRN INTEGER NOT NULL,
         Course4 TEXT,
         DOW4 TEXT,
         Time4 TEXT,
+        CRN INTEGER NOT NULL,
         Course5 TEXT,
         DOW5 TEXT,
         Time5 TEXT
     );
     """
 
-    #Student_Scedule – Student Name, CRN, Course1, DOW1, Time1, Course2, DOW2, Time2, Course3, DOW3, Time3, Course4, DOW4, Time4, Course5, DOW5, Time5	.
+    #Student_Scedule – Student Name, CRN, Course1, DOW1, Time1, CRN, Course2, DOW2, Time2, CRN, Course3, DOW3, Time3, CRN, Course4, DOW4, Time4, CRN, Course5, DOW5, Time5	.
 
     #Execute table creation and commit
     cursor.execute(create_schedule_table)
