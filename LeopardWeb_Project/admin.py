@@ -148,17 +148,71 @@ class Admin(User):
         add_crn = int(input("What is the CRN of the course you would like to assign?"))
         sql_command = ("""SELECT * FROM INSTRUCTOR WHERE ID = ?""")
         self.cursor.execute(sql_command,(prof_id,))
-        prof_rows = self.cusror.fetchall()
+        prof_rows = self.cursor.fetchall()
         for row in prof_rows:
             print(row)
-        confirm_prof = int(input("Is this the correct instructor? \n    1.) Yes \n  2.) No"))
+        confirm_prof = int(input("Is above the correct instructor? \n    1.) Yes \n  2.) No"))
         match confirm_prof:
             case 1:
                 sql_command = ("""SELECT * FROM COURSES WHERE CRN = ?""")
                 self.cursor.execute(sql_command,(add_crn,))
-
-
+                course_rows = self.cursor.fetchall()
+                for course_row in course_rows:
+                    print(course_row)
+                confirm_crn = int(input("Is above the correct course?"))
+                match confirm_crn:
+                    case 1:
+                        instructorname = f"{prof_rows[0][1]} {prof_rows[0][2]}"
+                        course_title = f"{course_rows[0][1]}"
+                        sql_command = ("""INSERT INTO COURSE_TEACHER (CRN, TITLE, DEPARTMENT, TIME, DAYS, SEMESTER, CREDITS, INSTRUCTOR_ID, INSTRUCTOR_NAME, INSTRUCTOR_SURNAME, INSTRUCTOR_TITLE) VALUES (?,?,?,?,?,?,?,?,?,?,?)""")         
+                        values = (
+                            course_rows[0][0], course_title, course_rows[0][2], course_rows[0][3], course_rows[0][4], course_rows[0][5], course_rows[0][7], prof_rows[0][0], prof_rows[0][1], prof_rows[0][2], prof_rows[0][3]
+                            #crn            #title          #Dept           #time             #days         #semester       #Credits     #instructor ID  #Prof Fname  # Prof Lname
+                        ) 
+                        self.cursor.execute(sql_command,values)
+                        self.cx.commit()
+                        print(f"You have linked {instructorname} to {course_title}. \n")
+                    case 2:
+                        print(f"Okay.You have not linked {instructorname} to {course_title}. \n")
+            case 2:
+                print("You have decided not to link tan instructor to a course.")
         return
+
+    def unlink_prof(self):
+        prof_id = int(input("What is the ID of the instructor you would like to unlink?"))
+        add_crn = int(input("What is the CRN of the course you would like to unlink the professor from?"))
+        sql_command = ("""SELECT * FROM INSTRUCTOR WHERE ID = ?""")
+        self.cursor.execute(sql_command,(prof_id,))
+        prof_rows = self.cursor.fetchall()
+        for row in prof_rows:
+            print(row)
+        confirm_prof = int(input("Is above the correct instructor? \n    1.) Yes \n  2.) No"))
+        match confirm_prof:
+            case 1:
+                sql_command = ("""SELECT * FROM COURSES WHERE CRN = ?""")
+                self.cursor.execute(sql_command,(add_crn,))
+                course_rows = self.cursor.fetchall()
+                for course_row in course_rows:
+                    print(course_row)
+                confirm_crn = int(input("Is above the correct course?"))
+                match confirm_crn:
+                    case 1:
+                        instructorname = f"{prof_rows[0][1]} {prof_rows[0][2]}"
+                        course_title = f"{course_rows[0][1]}"
+                        sql_command = ("""DELETE FROM COURSE_TEACHER WHERE CRN = ? AND TITLE = ? AND DEPARTMENT = ? AND TIME = ? AND DAYS = ? AND SEMESTER = ? AND CREDITS = ? AND INSTRUCTOR_ID = ? AND INSTRUCTOR_NAME = ? AND INSTRUCTOR_SURNAME = ? AND INSTRUCTOR_TITLE = ?""")        
+                        values = (
+                            course_rows[0][0], course_title, course_rows[0][2], course_rows[0][3], course_rows[0][4], course_rows[0][5], course_rows[0][7], prof_rows[0][0], prof_rows[0][1], prof_rows[0][2], prof_rows[0][3]
+                            #crn            #title          #Dept           #time             #days         #semester       #Credits     #instructor ID  #Prof Fname  # Prof Lname
+                        ) 
+                        self.cursor.execute(sql_command,(values))
+                        self.cx.commit()
+                        print(f"You have unlinked {instructorname} from {course_title}. \n")
+                    case 2:
+                        print(f"Okay.You have not unlinkedlinked {instructorname} from {course_title}. \n")
+            case 2:
+                print("You have decided not to unlink an instructor to a course.")
+        return
+
     def print_schedule(self):
           return "This is the print schedule function!"
     
