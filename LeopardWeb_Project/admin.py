@@ -8,7 +8,7 @@ class Admin(User):
         User.__init__(self, in_firstName, in_lastName, in_id)
         self.cursor = cursor
         self.cx = cx
-        
+       
     #methods    
     def add_course(self):
         new_crn = int(input("What is the CRN of the new course?"))
@@ -18,7 +18,6 @@ class Admin(User):
         try:
             time_start = datetime.datetime.strptime(new_start, "%I:%M %p").time()
             time_start_str = time_start.strftime("%H:%M:%S")
-
             print(f"You entered the time: {time_start_str}")
         except ValueError:
             print("Invalid time format. Please use HH:MM AM/PM.")
@@ -49,7 +48,7 @@ class Admin(User):
                     return ("Course Removed!")
                 case 2:
                     print(f"You have selected to not delete CRN {remove_crn}")
-                    return
+        return
     
     def add_user(self):
         new_id = int(input("What is the ID of the new student?"))
@@ -61,10 +60,11 @@ class Admin(User):
         sql_command = """INSERT INTO STUDENT (ID, NAME, SURNAME, GRADYEAR, MAJOR, EMAIL) VALUES (?, ?, ?, ?, ?, ?)"""
         self.cursor.execute(sql_command, (new_id, new_fname, new_lname, new_gradyear, new_major, new_email))
         self.cx.commit()
+        print(f"New user Added!")
+        return
  
     def remove_user(self):
           return"This is the function that removes a user from the system"
-
 
     def add_instructor(self):
         new_id = int(input("What is the ID of the new instructor?"))
@@ -77,14 +77,88 @@ class Admin(User):
         sql_command = """INSERT INTO INSTRUCTOR (ID, NAME, SURNAME, TITLE, HIREYEAR, DEPT, EMAIL) VALUES (?, ?, ?, ?, ?, ?,?)"""
         self.cursor.execute(sql_command, (new_id, new_fname, new_lname, new_title, new_hireyear, new_dept, new_email))
         self.cx.commit()
-        return"This is the function that adds an instructor to the system"
+        return
     
     def add_to_course(self):
-          return"This is the function that adds a student to a course"
+        student_id = int(input("What is the ID of the student you would like to add to this class?"))  
+        add_crn = int(input("What is the CRN of the course you are adding the student to?"))
+        sql_command = ("""SELECT * FROM STUDENT WHERE ID = ? """)     
+        self.cursor.execute(sql_command,(student_id,))
+        rows = self.cursor.fetchall()
+        for row in rows:
+            print(row)
+        confirm_student = int(input("Is this the correct Student?\n 1.) Yes\n 2.) No"))
+        match confirm_student:
+            case 1:
+                sql_command = ("""SELECT * FROM COURSES WHERE CRN = ?""")
+                self.cursor.execute(sql_command, (add_crn,))
+                course_rows = self.cursor.fetchall()
+                print("Okay. Are you sure you would like to add the student to the above course?\n  1.) Yes \n  2.) No")
+                for course_row in course_rows:
+                    print(course_row)
+                confirm_crn = int(input())
+                match confirm_crn:
+                    case 1:
+                        studentname = f"{rows[0][1]} {rows[0][2]}"
+                        course_title = f"{course_rows[0][1]}"
+                        sql_command = ("""INSERT INTO ENROLLMENT (STUDENT_ID, CRN) VALUES (?, ?)""")
+                        self.cursor.execute(sql_command,(student_id, add_crn))
+                        self.cx.commit()
+                        print(f"You have added {studentname} to {course_title}. \n")
+                    case 2: 
+                        print(f"Okay. You have not added {studentname} to {course_title}. \n")
+            case 2:
+                print("You have decided not to add a student to a course. ")
+        return 
 
     def remove_from_course(self):
-          return"This is the function that removes a student from a course"
+        student_id = int(input("What is the ID of the student you would like to remove from a class"))  
+        remove_crn = int(input("What is the CRN of the course you are removing the student from?"))
+        sql_command = ("""SELECT * FROM STUDENT WHERE ID = ? """)     
+        self.cursor.execute(sql_command,(student_id,))
+        rows = self.cursor.fetchall()
+        for row in rows:
+            print(row)
+        confirm_student = int(input("Is this the correct Student?\n 1.) Yes\n 2.) No"))
+        match confirm_student:
+            case 1:
+                sql_command = ("""SELECT * FROM COURSES WHERE CRN = ?""")
+                self.cursor.execute(sql_command, (remove_crn,))
+                course_rows = self.cursor.fetchall()
+                print("Okay. Are you sure you would like to remove the student from the above course?\n  1.) Yes \n  2.) No")
+                for course_row in course_rows:
+                    print(course_row)
+                confirm_crn = int(input())
+                match confirm_crn:
+                    case 1:
+                        studentname = f"{rows[0][1]} {rows[0][2]}"
+                        course_title = f"{course_rows[0][1]}"
+                        sql_command = ("""DELETE FROM ENROLLMENT WHERE STUDENT_ID = ? AND CRN = ? """)
+                        self.cursor.execute(sql_command,(student_id, remove_crn))
+                        self.cx.commit()
+                        print(f"You have removed {studentname} from {course_title}. \n")
+                    case 2: 
+                        print(f"Okay. You have not removed {studentname} from {course_title}. \n")
+            case 2:
+                print("You have decided not to add a student to a course. ")
+        return
 
+    def link_prof(self):
+        prof_id = int(input("What is the ID of the instructor you would like to assign?"))
+        add_crn = int(input("What is the CRN of the course you would like to assign?"))
+        sql_command = ("""SELECT * FROM INSTRUCTOR WHERE ID = ?""")
+        self.cursor.execute(sql_command,(prof_id,))
+        prof_rows = self.cusror.fetchall()
+        for row in prof_rows:
+            print(row)
+        confirm_prof = int(input("Is this the correct instructor? \n    1.) Yes \n  2.) No"))
+        match confirm_prof:
+            case 1:
+                sql_command = ("""SELECT * FROM COURSES WHERE CRN = ?""")
+                self.cursor.execute(sql_command,(add_crn,))
+
+
+        return
     def print_schedule(self):
           return "This is the print schedule function!"
     
@@ -102,17 +176,14 @@ class Admin(User):
             #Exit if the keyword is not valid
             print("Invalid search keyword.")
             return
-
         #Format the value for SQL compatibility
         if isinstance(search_value,int):
             search_value=str(search_value)
         else:
             search_value=f"'{search_value}'"
-
         #Build and execute the SQL query
         query=f"SELECT * FROM COURSES WHERE {search_keyword} = {search_value}"
         self.cursor.execute(query)
-
         #Fetch all matching rows and print them
         rows=self.cursor.fetchall()
         for row in rows:
