@@ -47,12 +47,12 @@ def main():
     # new_admin1.add_course()
     # new_admin1.remove_course()
     # new_admin1.search_courses("TITLE", "Advanced Digital Circuit Design")
-    # new_admin1.add_user()
+    new_admin1.add_user()
     # new_admin1.add_instructor()
     # new_admin1.add_to_course()
     # new_admin1.remove_from_course()
     # new_admin1.link_prof()
-    new_admin1.unlink_prof()
+    # new_admin1.unlink_prof()
     cx.commit() 
 
 # close the connection 

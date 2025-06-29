@@ -1,5 +1,7 @@
 from os import remove
 from user import User
+from student import Student
+from instructor import Instructor
 import sqlite3
 import datetime
 
@@ -15,6 +17,7 @@ class Admin(User):
         new_title = input("What is the title of the course?")
         new_dep = input("What department is the new course in?")
         new_start = input("Enter time in HH:MM AM/PM format: ")
+        course = Course(new_crn, new_title, new_dep, time_start, new_days, new_sem, new_year, credits)
         try:
             time_start = datetime.datetime.strptime(new_start, "%I:%M %p").time()
             time_start_str = time_start.strftime("%H:%M:%S")
@@ -26,6 +29,7 @@ class Admin(User):
         new_year = int(input("What year will this course be available?"))
         credits = int(input("How many credits is this course?"))
         sql_command = """INSERT INTO COURSES (CRN, TITLE, DEPARTMENT, TIME, DAYS, SEMESTER, YEAR, CREDITS) VALUES (?, ?, ?, ?, ?, ?, ?,?)"""
+
         self.cursor.execute(sql_command,(new_crn, new_title, new_dep, time_start_str, new_days, new_sem, new_year, credits))  
         self.cx.commit() 
         return "Course Successfully Added!"
@@ -57,8 +61,15 @@ class Admin(User):
         new_gradyear = int(input("What year does the new student graduate?"))
         new_major = str(input("What is the students major? (BSAS format)"))
         new_email = (new_lname + new_fname[0]).lower()
+        new_student = Student(new_id, new_fname, new_lname, new_gradyear, new_major, new_email)
         sql_command = """INSERT INTO STUDENT (ID, NAME, SURNAME, GRADYEAR, MAJOR, EMAIL) VALUES (?, ?, ?, ?, ?, ?)"""
-        self.cursor.execute(sql_command, (new_id, new_fname, new_lname, new_gradyear, new_major, new_email))
+        self.cursor.execute(sql_command,
+        (new_student.id,
+        new_student.name,
+        new_student.surname,
+        new_student.gradyear, 
+        new_student.major,
+        new_student.email))
         self.cx.commit()
         print(f"New user Added!")
         return
@@ -74,8 +85,17 @@ class Admin(User):
         new_hireyear = int(input("What year was the new instructor hired?"))
         new_dept = str(input("What department is the new instructor in?"))
         new_email = (new_lname + new_fname[0]).lower()
+        new_instructor = Instructor(new_id, new_fname, new_lname, new_title, new_hireyear, new_dept, new_email)
         sql_command = """INSERT INTO INSTRUCTOR (ID, NAME, SURNAME, TITLE, HIREYEAR, DEPT, EMAIL) VALUES (?, ?, ?, ?, ?, ?,?)"""
-        self.cursor.execute(sql_command, (new_id, new_fname, new_lname, new_title, new_hireyear, new_dept, new_email))
+        self.cursor.execute(sql_command, (
+        new_instructor.id,
+        new_instructor.name,
+        new_instructor.surname,
+        new_instructor.title,
+        new_instructor.hireyear,
+        new_instructor.dept,
+        new_instructor.email
+))
         self.cx.commit()
         return
     
@@ -167,7 +187,7 @@ class Admin(User):
                         sql_command = ("""INSERT INTO COURSE_TEACHER (CRN, TITLE, DEPARTMENT, TIME, DAYS, SEMESTER, CREDITS, INSTRUCTOR_ID, INSTRUCTOR_NAME, INSTRUCTOR_SURNAME, INSTRUCTOR_TITLE) VALUES (?,?,?,?,?,?,?,?,?,?,?)""")         
                         values = (
                             course_rows[0][0], course_title, course_rows[0][2], course_rows[0][3], course_rows[0][4], course_rows[0][5], course_rows[0][7], prof_rows[0][0], prof_rows[0][1], prof_rows[0][2], prof_rows[0][3]
-                            #crn            #title          #Dept           #time             #days         #semester       #Credits     #instructor ID  #Prof Fname  # Prof Lname
+                            #crn                #title          #Dept           #time             # days                #semester       #Credits            #instructor ID      #Prof Fname     # Prof Lname    #Prof Title
                         ) 
                         self.cursor.execute(sql_command,values)
                         self.cx.commit()
@@ -202,7 +222,7 @@ class Admin(User):
                         sql_command = ("""DELETE FROM COURSE_TEACHER WHERE CRN = ? AND TITLE = ? AND DEPARTMENT = ? AND TIME = ? AND DAYS = ? AND SEMESTER = ? AND CREDITS = ? AND INSTRUCTOR_ID = ? AND INSTRUCTOR_NAME = ? AND INSTRUCTOR_SURNAME = ? AND INSTRUCTOR_TITLE = ?""")        
                         values = (
                             course_rows[0][0], course_title, course_rows[0][2], course_rows[0][3], course_rows[0][4], course_rows[0][5], course_rows[0][7], prof_rows[0][0], prof_rows[0][1], prof_rows[0][2], prof_rows[0][3]
-                            #crn            #title          #Dept           #time             #days         #semester       #Credits     #instructor ID  #Prof Fname  # Prof Lname
+                            #crn                #title          #Dept           #time               #days               #semester           #Credits        #instructor ID      #Prof Fname    # Prof Lname
                         ) 
                         self.cursor.execute(sql_command,(values))
                         self.cx.commit()
