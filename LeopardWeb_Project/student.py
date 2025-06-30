@@ -2,7 +2,7 @@ import sqlite3
 from user import User
 import datetime
 
-#test push to git 2
+#test push to git
 def slipt_time(time_str):
 
     start_time, end_time = time_str.split('-')
@@ -14,12 +14,8 @@ def slipt_time(time_str):
 
 class Student(User):
     
-    def __init__(self, in_firstName, in_lastName, in_id, gradyear=None, major=None, email=None):
+    def __init__(self, in_firstName, in_lastName, in_id):
         User.__init__(self, in_firstName, in_lastName, in_id)
-        self.gradyear = gradyear
-        self.major = major
-        self.email = email
-
         
     def search_courses(self, Search_keyword, search_value):
         cx = sqlite3.connect("../LeopardWeb_Project/LeopardWeb_Project/test.db")  # This has to be changed to the correct DB File 
@@ -48,7 +44,7 @@ class Student(User):
 
 
     def add_course(self, CRN):
-        cx = sqlite3.connect("LeopardWeb_Project/assignment3.db")  # Adjust the path to your database file
+        cx = sqlite3.connect("../LeopardWeb_Project/LeopardWeb_Project/test.db")  # Adjust the path to your database file
         cursor = cx.cursor()
 
 
@@ -89,17 +85,27 @@ class Student(User):
 
 
     def remove_course(self, CRN):
-        cx = sqlite3.connect("LeopardWeb_Project/assignment3.db")  # REMEMBER TO FIX THIS LATER
+        cx = sqlite3.connect("../LeopardWeb_Project/LeopardWeb_Project/test.db")  # REMEMBER TO FIX THIS LATER
         cursor = cx.cursor()
-        query = "DELETE FROM ENROLLMENT WHERE STUDENT_ID = ? AND CRN = ?"
-        cursor.execute(query, (self.id, CRN))  
-        cx.commit()
-        print(f"Course with CRN {CRN} removed successfully.")         
+        #querry to chek if the student is enrolled in the course
+        sql_command = "SELECT * FROM ENROLLMENT WHERE STUDENT_ID = ? AND CRN = ?"
+        cursor.execute(sql_command, (self.id, CRN))
+        enrollment = cursor.fetchone()
+
+        #check if the student is enrolled in the course
+        if not enrollment:
+            print("You are not enrolled in this course.")
+            cx.close()
+        else:
+            query = "DELETE FROM ENROLLMENT WHERE STUDENT_ID = ? AND CRN = ?"
+            cursor.execute(query, (self.id, CRN))  
+            cx.commit()
+            print(f"Course with CRN {CRN} removed successfully.")         
         cx.close()
 
 
     def print_courses(self):
-        cx = sqlite3.connect("LeopardWeb_Project/assignment3.db")  # FIX LATTER
+        cx = sqlite3.connect("../LeopardWeb_Project/LeopardWeb_Project/test.db")  # FIX LATTER
         cursor = cx.cursor()
 
         query = """
@@ -107,10 +113,19 @@ class Student(User):
         WHERE ENROLLMENT.STUDENT_ID = ?
         """
         cursor.execute(query, (self.id,))
-
         rows = cursor.fetchall()
+        course = []
+
+        #use the enrolled courses to get the course details
         for row in rows:
-            print(row)  
+            query = "SELECT * FROM COURSES WHERE CRN = ?"
+            cursor.execute(query, (row[1],))
+            course.append( cursor.fetchall())
+        print("Courses enrolled:")
+        #display the relevant course details
+        for course in course:
+            print("Name: ",course[0][1]," Department:", course[0][2]," Time:", course[0][3],"Days: ", course[0][4])
+        cx.close()
         return rows   
 
 
