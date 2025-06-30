@@ -2,6 +2,7 @@ import sqlite3
 from user import User
 import datetime
 
+#test push to git 2
 def slipt_time(time_str):
 
     start_time, end_time = time_str.split('-')
@@ -43,7 +44,7 @@ class Student(User):
 
 
     def add_course(self, CRN):
-        cx = sqlite3.connect("../LeopardWeb_Project/LeopardWeb_Project/test.db")  # Adjust the path to your database file
+        cx = sqlite3.connect("LeopardWeb_Project/assignment3.db")  # Adjust the path to your database file
         cursor = cx.cursor()
 
 
@@ -84,7 +85,7 @@ class Student(User):
 
 
     def remove_course(self, CRN):
-        cx = sqlite3.connect("../LeopardWeb_Project/LeopardWeb_Project/test.db")  # REMEMBER TO FIX THIS LATER
+        cx = sqlite3.connect("LeopardWeb_Project/assignment3.db")  # REMEMBER TO FIX THIS LATER
         cursor = cx.cursor()
         query = "DELETE FROM ENROLLMENT WHERE STUDENT_ID = ? AND CRN = ?"
         cursor.execute(query, (self.id, CRN))  
@@ -94,7 +95,7 @@ class Student(User):
 
 
     def print_courses(self):
-        cx = sqlite3.connect("../LeopardWeb_Project/LeopardWeb_Project/test.db")  # FIX LATTER
+        cx = sqlite3.connect("LeopardWeb_Project/assignment3.db")  # FIX LATTER
         cursor = cx.cursor()
 
         query = """
@@ -107,6 +108,8 @@ class Student(User):
         for row in rows:
             print(row)  
         return rows   
+
+
 
 if __name__ == "__main__":
     student= Student("John", "Doe", 12345)
