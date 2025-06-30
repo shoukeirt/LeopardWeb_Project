@@ -23,6 +23,7 @@
   <ItemGroup>
     <Compile Include="admin.py" />
     <Compile Include="instructor.py" />
+    <Compile Include="login_menu.py" />
     <Compile Include="main.py" />
     <Compile Include="python_sqlite_programmers.py" />
     <Compile Include="student.py" />

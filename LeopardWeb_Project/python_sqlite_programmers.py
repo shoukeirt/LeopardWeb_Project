@@ -109,6 +109,91 @@ CREATE TABLE IF NOT EXISTS ENROLLMENT (
 # 	print(i)
 
 
+sql_command = """CREATE TABLE LOGIN(  
+ID INTEGER PRIMARY KEY NOT NULL,
+EMAIL TEXT NOT NULL,
+PASSWORD INTEGER NOT NULL
+)
+;"""
+# cursor.execute(sql_command)
+
+#STUDENT TABLE INFO
+# sql_command = """INSERT INTO LOGIN VALUES(10001, "newtoni", 1144)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10002, "curiem", 6760)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10003, "telsan", 1691)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10004, "notcool", 9391)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10005, "vonneumannj", 6407)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10006, "hopperg", 6595)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10007, "jemisonm", 9304)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10008, "deanm", 9469)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10009, "faradaym", 7886)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10010, "lovelacea", 5598)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10011, "magliozzia", 7761)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10012, "jot", 1598)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10013, "brownj", 2382)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10014, "smartm", 1121)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10015, "moorem", 3313)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10016, "irwinr", 5749)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10017, "lawrencet", 1981)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10018, "wilsono", 8727)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10019, "parkerp", 7665)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(10020, "bradyt", 2957)"""
+# cursor.execute(sql_command)
+# #INSTRUCTOR LOGIN TABLE INFO
+# sql_command = """INSERT INTO LOGIN VALUES(20002, "patrickn", 6034)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(20003, "galileig", 3074)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(20004, "turinga", 5396)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(20005, "boumank", 5896)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(20006, "bernoullid", 9916)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(20007, "stevensb", 4140)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(20008, "duncane", 5235)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(20009, "griffinh", 9618)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(20010, "ironsl", 4100)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(20011, "chambersm", 3451)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(20012, "weathersc", 4385)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(20013, "smithm", 8321)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(20014, "birdl", 4016)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(20015, "mossr", 5166)"""
+# cursor.execute(sql_command)
+# #ADMIN LOGIN TABLE INFO
+# sql_command = """INSERT INTO LOGIN VALUES(30001, "hamiltonm", 8212)"""
+# cursor.execute(sql_command)
+# sql_command = """INSERT INTO LOGIN VALUES(30002, "rubinv", 3325)"""
+# cursor.execute(sql_command)
+
+
 
 # To save the changes in the files. Never skip this.  
 # If we skip this, nothing will be saved in the database. 
