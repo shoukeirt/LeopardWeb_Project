@@ -1,3 +1,5 @@
+# WRITER : HARLJEN HILL
+
 import sqlite3
 from user import User
 import datetime
