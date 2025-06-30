@@ -2,6 +2,9 @@ import user
 import student
 import instructor 
 import admin
+ ##file made by Toufic Shoukeir
+
+
 
 def login(cursor,cx):
     email = str(input("What is your username? EXCLUDE @WIT.EDU \n"))
@@ -26,13 +29,17 @@ def login(cursor,cx):
 
         elif str(id).startswith("2"):
             print("Instructor Successfully Logged In!")
-            sql_command = ("SELECT NAME, SURNAME FROM INSTRUCTOR WHERE ID = ?")
+            sql_command = ("SELECT NAME, SURNAME, TITLE, HIREYEAR, DEPT, EMAIL FROM INSTRUCTOR WHERE ID = ?")
             cursor.execute(sql_command,(id,))
             name = cursor.fetchone()
             if name:
                 fname = name[0]
                 lname = name[1]
-                instructor_obj = instructor.Instructor(fname, lname, id)
+                title = name[2]
+                hireyear = name[3]
+                dept = name[4]
+                email = name[5]
+                instructor_obj = instructor.Instructor(fname, lname, id, title, hireyear, dept, email)
                 instructor_menu(instructor_obj)
             else:
                 print("Not a valid user type. Please try again.")
@@ -56,7 +63,7 @@ def login(cursor,cx):
 def admin_menu(admin):
     verify = 0
     while (verify != 1):
-        choice = int(input(" 1.) Add Course to Course List \n 2.) Remove Course from Course List \n 3.) Add User \n 4.) Remove User \n 5.) Add Instructor\n 6.) Link Instructor to Course \n 7.) Logout\n"))
+        choice = int(input(" 1.) Add Course to Course List \n 2.) Remove Course from Course List \n 3.) Add User \n 4.) Remove User \n 5.) Add Instructor\n 6.) Link Instructor to Course \n 7.) Unlink Instructor from Course\n 8.) Add Student to Course \n 9.) Remove Student from Course\n 10.) Logout"))
         match choice:
             case 1:
                 admin.add_course()
@@ -71,6 +78,12 @@ def admin_menu(admin):
             case 6:
                 admin.link_prof()
             case 7:
+                admin.unlink_prof()
+            case 8: 
+                admin.add_to_course()
+            case 9:
+                admin.remove_from_course()
+            case 10:
                 verify = int(input("Are you sure you want to logout?\n 1.) Yes \n 2.) No"))
                 match verify:
                     case 1:
@@ -89,9 +102,9 @@ def instructor_menu(instructor):
             case 2:
                 instructor.print_schedule()
             case 3:
-                instructor.search_roster()
+                instructor.search_roster(3725)
             case 4: 
-                instructor.print_roster()
+                instructor.print_roster(3725)
             case 5:
                 verify = int(input("Are you sure you want to logout? \n 1.) Yes \n 2.) No"))
                 match verify:

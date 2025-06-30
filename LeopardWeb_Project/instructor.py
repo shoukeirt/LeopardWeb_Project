@@ -4,9 +4,13 @@ import sqlite3
 
 #Instructor subclass inheriting from User
 class Instructor(User):
-    def __init__(self,in_firstName,in_lastName,in_id):
+    def __init__(self, in_id, in_firstName,in_lastName, in_title, in_hireyear, in_dept, in_email):
         #Call the superclass (User) constructor
         super().__init__(in_firstName,in_lastName,in_id)
+        self.title = in_title
+        self.hireyear = in_hireyear
+        self.dept = in_dept
+        self.email = in_email;
 
     #Search for courses based on CRN (default) or Course Name (user-specified)
     def search_courses(self,Search_keyword='CRN',search_value=None):

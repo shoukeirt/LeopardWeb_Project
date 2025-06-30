@@ -5,7 +5,9 @@ class User():
     def __init__(self, in_firstname, in_lastname, in_id):
 
         #attributes 
-        self.name = in_firstname + " " +  in_lastname
+        self.name = f"{in_firstname}  {in_lastname}"
+        self.firstName = in_firstname
+        self.lastName = in_lastname
         self.id = in_id
 
     #Methods

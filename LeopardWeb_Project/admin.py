@@ -5,11 +5,14 @@ from instructor import Instructor
 import sqlite3
 import datetime
 
+
+# File written by Toufic Shoukeir
 class Admin(User):
     def __init__(self, in_firstName, in_lastName, in_id, cursor, cx):
         User.__init__(self, in_firstName, in_lastName, in_id)
         self.cursor = cursor
         self.cx = cx
+
        
     #methods    
     def add_course(self):
@@ -65,7 +68,7 @@ class Admin(User):
         self.cursor.execute(sql_command,
         (new_student.id,
         new_student.name,
-        new_student.surname,
+        new_student.lastName,
         new_student.gradyear, 
         new_student.major,
         new_student.email))
@@ -88,8 +91,8 @@ class Admin(User):
         sql_command = """INSERT INTO INSTRUCTOR (ID, NAME, SURNAME, TITLE, HIREYEAR, DEPT, EMAIL) VALUES (?, ?, ?, ?, ?, ?,?)"""
         self.cursor.execute(sql_command, (
         new_instructor.id,
-        new_instructor.name,
-        new_instructor.surname,
+        new_instructor.firstName,
+        new_instructor.lastName,
         new_instructor.title,
         new_instructor.hireyear,
         new_instructor.dept,

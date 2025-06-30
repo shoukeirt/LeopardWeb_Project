@@ -3,8 +3,12 @@ from user import User
 
 class Student(User):
     
-    def __init__(self, in_firstName, in_lastName, in_id):
+    def __init__(self, in_firstName, in_lastName, in_id, gradyear=None, major=None, email=None):
         User.__init__(self, in_firstName, in_lastName, in_id)
+        self.gradyear = gradyear
+        self.major = major
+        self.email = email
+
         
     def search_courses(self, Search_keyword, search_value):
         cx = sqlite3.connect("assignment3.db")
