@@ -208,15 +208,18 @@ if __name__ == "__main__":
     student2.print_courses()
     student.print_courses()
 
+    #test testing funtionaliity of program
     first_name =input("What is your first name: ")  
     last_name = input("what is your last name: ")
     student_id = int(input("What is your student id: "))
     choose = input("Choose what you want to do 0 for search, \n1 for add, \n2 for remove, \n3 for print courses, \n4 for exit ")
     
+    # Create a Student object with the provided information
     student_test = Student(first_name, last_name, student_id)
 
+    # Loop until the user chooses to exit with 4
     while choose != "4":
-
+        #if the user chooses to search for courses, call the search_courses method
         if choose == "0":
             search_keyword = input("What do you want to search for? (CRN, COURSE NAME, TITLE) ")
             if search_keyword == "":
@@ -226,21 +229,19 @@ if __name__ == "__main__":
                 print("search value cannot be empty ")
                 search_value = input("What is the value you want to search for? ")
             student_test.search_courses(search_keyword, search_value.upper())
+        #if the user chooses to add a course, call the add_course method
         elif choose == "1":
             crn = int(input("Enter the CRN to add: "))
             student_test.add_course(crn)
+        #if the user chooses to remove a course, call the remove_course method
         elif choose == "2":
             crn = int(input("Enter the CRN to remove: "))
             student_test.remove_course(crn)
+        #if the user chooses to print courses, call the print_courses method
         elif choose == "3":
             student_test.print_courses()
         else:
             print("Invalid choice. Please try again.")
+        # Ask the user for their next action
         choose = input("Choose what you want to do 0 for search, \n1 for add, \n2 for remove, \n3 for print courses, \n4 for exit ")
     
-    
-
-
-
-
-
