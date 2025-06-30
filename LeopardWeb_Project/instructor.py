@@ -131,4 +131,5 @@ class Instructor(User):
         except sqlite3.Error as e:
             print(f"SQL Error: {e}")
         finally:
+
             cx.close()
