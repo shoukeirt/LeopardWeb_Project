@@ -1,113 +1,134 @@
-#import User class
-from user import User
 import sqlite3
+from user import User
 
-#Instructor subclass inheriting from User
 class Instructor(User):
-    def __init__(self, in_id, in_firstName,in_lastName, in_title, in_hireyear, in_dept, in_email):
-        #Call the superclass (User) constructor
-        super().__init__(in_firstName,in_lastName,in_id)
+    def __init__(self, in_firstName, in_lastName, in_id, in_title, in_hireyear, in_dept, in_email):
+        super().__init__(in_firstName, in_lastName, in_id)
         self.title = in_title
         self.hireyear = in_hireyear
         self.dept = in_dept
-        self.email = in_email;
+        self.email = in_email
 
-    #Search for courses based on CRN (default) or Course Name (user-specified)
-    def search_courses(self,Search_keyword='CRN',search_value=None):
-        #Connect to the SQLite database
-        cx=sqlite3.connect("assignment3.db")
-        cursor=cx.cursor()
-
-        #Normalize the keyword input for query matching
+    def search_courses(self, Search_keyword='CRN', search_value=None):
+        cx = sqlite3.connect("assignment3.db")
+        cursor = cx.cursor()
         if Search_keyword.upper() == "CRN":
-            Search_keyword="CRN"
-        elif Search_keyword.upper() in ["COURSE NAME","TITLE"]:
-            Search_keyword="TITLE"
+            Search_keyword = "CRN"
+        elif Search_keyword.upper() in ["COURSE NAME", "TITLE"]:
+            Search_keyword = "TITLE"
         else:
-            #Exit if the keyword is not valid
             print("Invalid search keyword.")
             return
-
-        #Format the value for SQL compatibility
-        if isinstance(search_value,int):
-            search_value=str(search_value)
+        if isinstance(search_value, int):
+            search_value = str(search_value)
         else:
-            search_value=f"'{search_value}'"
-
-        #Build and execute the SQL query
-        query=f"SELECT * FROM COURSES WHERE {Search_keyword} = {search_value}"
+            search_value = f"'{search_value}'"
+        query = f"SELECT * FROM COURSES WHERE {Search_keyword} = {search_value}"
         cursor.execute(query)
-
-        #Fetch all matching rows and print them
-        rows=cursor.fetchall()
+        rows = cursor.fetchall()
         for row in rows:
             print(row)
+        cx.close()
 
-    #Print the instructor's teaching schedule by matching instructor ID
     def print_schedule(self):
-        #Connect to the SQLite database
-        cx=sqlite3.connect("assignment3.db")
-        cursor=cx.cursor()
+        cx = sqlite3.connect("assignment3.db")
+        cursor = cx.cursor()
+        try:
+            query = """
+            SELECT COURSE_TEACHER.CRN, COURSE_TEACHER.TITLE, COURSE_TEACHER.DEPARTMENT,
+                   COURSE_TEACHER.TIME, COURSE_TEACHER.DAYS, COURSE_TEACHER.SEMESTER, COURSE_TEACHER.CREDITS
+            FROM COURSE_TEACHER
+            WHERE INSTRUCTOR_NAME = ? AND INSTRUCTOR_SURNAME = ?
+            """
+            cursor.execute(query, (self.firstName, self.lastName))
+            rows = cursor.fetchall()
+            if rows:
+                print("\nYour Teaching Schedule:")
+                for row in rows:
+                    print(f"CRN: {row[0]}, Title: {row[1]}, Dept: {row[2]}, Time: {row[3]}, Days: {row[4]}, Semester: {row[5]}, Credits: {row[6]}")
+            else:
+                print("\nYou are not assigned to any courses.")
+        except sqlite3.OperationalError as e:
+            print(f"SQL Error: {e}")
+        finally:
+            cx.close()
 
-        #Convert instructor ID to string
-        instructor_id=str(self.id)
+    def search_roster(self, crn):
+        cx = sqlite3.connect("assignment3.db")
+        cursor = cx.cursor()
+        try:
+            cursor.execute("SELECT * FROM COURSE_TEACHER WHERE INSTRUCTOR_NAME = ? AND INSTRUCTOR_SURNAME = ? AND CRN = ?",
+                           (self.firstName, self.lastName, crn))
+            if not cursor.fetchone():
+                print(f"\nYou are not assigned to teach the course with CRN {crn}. Access denied.")
+                return
 
-        #Query the COURSES table for any course taught by this instructor
-        query=f"SELECT * FROM COURSES WHERE INSTRUCTOR_ID = {instructor_id}"
-        cursor.execute(query)
-        rows=cursor.fetchall()
-
-        #Print all courses returned from the query
-        print("Teaching Schedule:")
-        for row in rows:
-            print(row)
-
-    #Search a specific CRN course and check if a given student is enrolled
-    def search_roster(self,crn,student_name):
-        #Connect to the SQLite database
-        cx=sqlite3.connect("assignment3.db")
-        cursor=cx.cursor()
-
-        #Query the COURSES table to confirm the course exists
-        query_course=f"SELECT * FROM COURSES WHERE CRN = {crn}"
-        cursor.execute(query_course)
-        course=cursor.fetchone()
-
-        #If the course exists, continue to search for the student
-        if course:
+            cursor.execute("SELECT * FROM COURSES WHERE CRN = ?", (crn,))
+            course = cursor.fetchone()
+            if not course:
+                print("Course not found.")
+                return
             print(f"Course found: {course[1]}")
 
-            #Query the Student_Schedule table to check student enrollment
-            query_student=f"SELECT * FROM Student_Schedule WHERE StudentName = '{student_name}' AND CRN = {crn}"
-            cursor.execute(query_student)
-            student=cursor.fetchone()
+            first = input("Enter the student's FIRST name: ").strip()
+            last = input("Enter the student's LAST name: ").strip()
+            full_name = f"{first} {last}"
 
-            #Print result based on presence of the student in the course
-            if student:
-                print(f"{student_name} is enrolled in CRN {crn}")
+            cursor.execute("SELECT * FROM Student_Schedule LIMIT 1")
+            col_names = [desc[0] for desc in cursor.description]
+            name_column = next((col for col in col_names if col.lower() in ['studentname', 'name', 'fullname', 'student', 'student name']), None)
+            if not name_column:
+                print("Error: Could not find student name column.")
+                return
+
+            crn_columns = [col for col in col_names if col.startswith('CRN')]
+            enrolled = False
+            for crn_col in crn_columns:
+                cursor.execute(f'SELECT * FROM Student_Schedule WHERE "{name_column}" = ? AND "{crn_col}" = ?', (full_name, crn))
+                if cursor.fetchone():
+                    enrolled = True
+                    break
+
+            if enrolled:
+                print(f"{full_name} is enrolled in CRN {crn}")
             else:
-                print(f"{student_name} is NOT enrolled in CRN {crn}")
-        else:
-            #If course not found, inform the user
-            print("Course not found.")
+                print(f"{full_name} is NOT enrolled in CRN {crn}")
+        except sqlite3.Error as e:
+            print(f"SQL Error: {e}")
+        finally:
+            cx.close()
 
-    #Print the full class roster for a specific course by CRN
-    def print_roster(self,crn):
-        #Connect to the SQLite database
-        cx=sqlite3.connect("assignment3.db")
-        cursor=cx.cursor()
+    def print_roster(self, crn):
+        cx = sqlite3.connect("assignment3.db")
+        cursor = cx.cursor()
+        try:
+            cursor.execute("SELECT * FROM COURSE_TEACHER WHERE INSTRUCTOR_NAME = ? AND INSTRUCTOR_SURNAME = ? AND CRN = ?",
+                           (self.firstName, self.lastName, crn))
+            if not cursor.fetchone():
+                print(f"\nYou are not assigned to teach the course with CRN {crn}. Access denied.")
+                return
 
-        #Query for student names enrolled in the specified course
-        query=f"SELECT StudentName FROM Student_Schedule WHERE CRN = {crn}"
-        cursor.execute(query)
-        rows=cursor.fetchall()
+            cursor.execute("SELECT * FROM Student_Schedule LIMIT 1")
+            col_names = [desc[0] for desc in cursor.description]
+            name_column = next((col for col in col_names if col.lower() in ['studentname', 'name', 'fullname', 'student', 'student name']), None)
+            if not name_column:
+                print("Error: Could not find student name column.")
+                return
 
-        #Display the roster
-        print(f"Class Roster for CRN {crn}:")
-        for row in rows:
-            print(row[0])
+            crn_columns = [col for col in col_names if col.startswith('CRN')]
+            enrolled_students = set()
+            for crn_col in crn_columns:
+                cursor.execute(f'SELECT "{name_column}" FROM Student_Schedule WHERE "{crn_col}" = ?', (crn,))
+                for result in cursor.fetchall():
+                    enrolled_students.add(result[0])
 
-    #Print all instructor information using existing print_name and print_id methods
-    def print_all_info(self):
-        print("ALL INSTRUCTOR INFO:")
-        return"NAME: "+self.print_name()+"\\nID: "+self.print_id()+"\\n"
+            print(f"\nClass Roster for CRN {crn}:")
+            if enrolled_students:
+                for student in sorted(enrolled_students):
+                    print(student)
+            else:
+                print("No students enrolled.")
+        except sqlite3.Error as e:
+            print(f"SQL Error: {e}")
+        finally:
+            cx.close()
