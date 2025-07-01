@@ -4,8 +4,6 @@ import instructor
 import admin
  ##file made by Toufic Shoukeir
 
-
-
 def login(cursor,cx):
     email = str(input("What is your username? EXCLUDE @WIT.EDU \n"))
     password = int(input("What is your password? #### Format"))
@@ -98,13 +96,22 @@ def instructor_menu(instructor):
         choice = int(input(" 1.) Search Courses \n 2.) Print Course Schedule \n 3.) Search Classlist \n 4.) Print Classlist \n 5.) Logout "))
         match choice:
             case 1:
-                instructor.search_courses()
+                choice1 = int(input("How would you like to search? \n 1.) TITILE \n 2.) CRN"))
+                match choice1:
+                    case 1:
+                        title = str(input("What is the title of your course? (Spaces between words, first letter of each word capital) \n"))
+                        instructor.search_courses(Search_keyword = "TITLE", search_value = title)
+                    case 2:
+                         crn = int(input("What is the CRN of the course you want to view? \n"))
+                         instructor.search_courses(Search_keyword = "CRN", search_value = crn )
             case 2:
                 instructor.print_schedule()
             case 3:
-                instructor.search_roster(3725)
+                crn = int(input("What is the CRN of the course you want to search? \n"))
+                instructor.search_roster(crn)
             case 4: 
-                instructor.print_roster(3725)
+                crn = int(input("What is the CRN of the course roster you want to print? \n"))
+                instructor.search_roster(crn)
             case 5:
                 verify = int(input("Are you sure you want to logout? \n 1.) Yes \n 2.) No"))
                 match verify:
@@ -120,7 +127,14 @@ def student_menu(student):
         choice = int(input(" 1.) Search Courses \n 2.) Add Course to Schedule \n 3.) Remove Course from Schedule\n 4.) Print Schedule \n 5.) Logout "))
         match choice:
             case 1:
-                student.search_courses()
+                choice1 = int(input("How would you like to search? \n 1.) TITILE \n 2.) CRN"))
+                match choice1:
+                    case 1:
+                        title = str(input("What is the title of your course? (Spaces between words, first letter of each word capital) \n"))
+                        instructor.search_courses(Search_keyword = "TITLE", search_value = title)
+                    case 2:
+                         crn = int(input("What is the CRN of the course you want to view? \n"))
+                         instructor.search_courses(Search_keyword = "CRN", search_value = crn)
             case 2:
                 student.add_course()
             case 3:

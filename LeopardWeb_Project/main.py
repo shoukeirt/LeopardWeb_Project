@@ -1,64 +1,15 @@
 import sqlite3
-import os
-import user
+from user import User
 import student
-import instructor 
-import admin
-import login_menu
-cx = sqlite3.connect("assignment3.db")
-cursor = cx.cursor()
-              
+from student import Student
+from login_menu import login
+import datetime
+
 def main():
-    # cursor.execute("SELECT * FROM STUDENT")
-    # rows = cursor.fetchall();
-
-    # for row in rows:
-    #     print(row)
-    
-    # cursor.execute("SELECT * FROM INSTRUCTOR")
-    # rows = cursor.fetchall()
-
-    # for row in rows:
-    #     print(row)
-        
-    # sql_command = """INSERT INTO student VALUES(10011, 'ANTHONY', 'MAGLIOZZI', 2026, "BSCE",'Magliozzia');"""
-    # #cursor.execute(sql_command)
-    # cursor.execute("SELECT * FROM STUDENT")
-    # # rows = cursor.fetchall();
-    # sql_command = """DELETE FROM COURSES WHERE CRN = 4"""
-
-    # # cursor.execute(sql_command)
-    # for row in rows:
-    #     print(row)
-        
-    # # cursor.execute("PRAGMA table_info(STUDENT);")
-    # # for col in cursor.fetchall():
-    # #     print(col)
-    
-    # # print("USING:", os.path.abspath("assignment3.db"))
-  
-    # student1 = student.Student("Hill","Hill",1)
-    # student1.search_courses("CRN", "2500")
-    # new_admin1 = admin.Admin("First","Admin", 30003, cursor, cx)
-
-    # new_admin1.add_course()
-    # new_admin1.remove_course()
-    # new_admin1.search_courses("TITLE", "Advanced Digital Circuit Design")
-    # new_admin1.add_user()
-    # new_admin1.add_instructor()
-    # new_admin1.add_to_course()
-    # new_admin1.remove_from_course()
-    # new_admin1.link_prof()
-    # new_admin1.unlink_prof()
-
-    login_menu.login(cursor,cx)
+    cx = sqlite3.connect("assignment3.db")
+    cursor = cx.cursor()
+    login(cursor,cx)
     cx.commit() 
 
-# close the connection 
-    cx.close() 
 
 main()
-
-
-
-
