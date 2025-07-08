@@ -1,149 +1,153 @@
-from admin import Admin
-from instructor import Instructor
-from student import Student
+import user
+import student
+import instructor 
+import admin
+ ##file made by Toufic Shoukeir
 
-def login(cursor, cx):
-    print("========== COURSE SYSTEM ==========")
-    print("1. Login")
-    print("2. Exit")
-    option = input("Choose an option: ").strip()
-
-    if option == "1":
-        username = input("What is your username? EXCLUDE @WIT.EDU\n").strip().lower()
-        password = input("What is your password? #### Format\n").strip()
-
-        cursor.execute("SELECT * FROM LOGIN")
-        logins = cursor.fetchall()
-
-        user_data = None
-        for row in logins:
-            db_id = str(row[0]).strip()
-            db_email = str(row[1]).strip().lower()
-            db_password = str(row[2]).strip()
-            if db_email == username and db_password == password:
-                user_data = (db_id, db_email)
-                break
-
-        if user_data:
-            user_id = user_data[0]
-
-            # Check Admin Table
-            cursor.execute("SELECT * FROM ADMIN WHERE ID = ?", (user_id,))
-            admin_data = cursor.fetchone()
-            if admin_data:
-                admin_obj = Admin(admin_data[1], admin_data[2], admin_data[0], cursor, cx)
-                print("Admin Successfully Logged In!")
-                admin_menu(admin_obj, cursor, cx)
-                return
-
-            # Check Instructor Table
-            cursor.execute("SELECT * FROM INSTRUCTOR WHERE ID = ?", (user_id,))
-            instructor_data = cursor.fetchone()
-            if instructor_data:
-                instructor_obj = Instructor(
-                    instructor_data[1], instructor_data[2], instructor_data[0],
-                    instructor_data[3], instructor_data[4],
-                    instructor_data[5], instructor_data[6]
-                )
-                print("Instructor Successfully Logged In!")
-                instructor_menu(instructor_obj)
-                return
-
-            # Check Student Table
-            cursor.execute("SELECT * FROM STUDENT WHERE ID = ?", (user_id,))
-            student_data = cursor.fetchone()
-            if student_data:
-                student_obj = Student(
-                    student_data[1], student_data[2], student_data[0],
-                    student_data[3], student_data[4], student_data[5]
-                )
-                print("Student Successfully Logged In!")
+def login(cursor,cx):
+    email = str(input("What is your username? EXCLUDE @WIT.EDU \n"))
+    password = int(input("What is your password? #### Format"))
+    sql_command = ("""SELECT ID FROM LOGIN WHERE EMAIL = ? AND PASSWORD = ?""")
+    cursor.execute(sql_command,(email, password))
+    result = cursor.fetchone()
+    if result:
+        id = result[0] #The ID is the first element in the LOGIN table. Use this to find the user type.
+        if str(id).startswith("1"): #make ID a string to use .startswith()
+            print("Student Successfully Logged In!")
+            sql_command = ("SELECT NAME, SURNAME FROM STUDENT WHERE ID = ?")
+            cursor.execute(sql_command,(id,))
+            name = cursor.fetchone()
+            if name:
+                fname = name[0]
+                lname = name[1]
+                student_obj = student.Student(fname, lname, id)
                 student_menu(student_obj)
-                return
-
-            print("User role not found in ADMIN, INSTRUCTOR, or STUDENT tables.")
-        else:
-            print("Invalid login.\nLogin failed. Please try again.\n")
-
-    elif option == "2":
-        print("Exiting program.")
-    else:
-        print("Invalid option.")
-
-# ----------------- ADMIN MENU ----------------- #
-def admin_menu(admin, cursor, cx):
-    while True:
-        print("\n1.) Add Course\n2.) Add User\n3.) Print User Info\n4.) Logout")
-        option = input("Choose an option: ")
-
-        if option == "1":
-            admin.add_course()
-        elif option == "2":
-            admin.add_user()
-        elif option == "3":
-            print(admin.print_all_info())
-        elif option == "4":
-            confirm = input("Are you sure you want to logout?\n1.) Yes\n2.) No\n")
-            if confirm == "1":
-                print("Logging out!")
-                break
             else:
-                continue
-        else:
-            print("Invalid option. Try again.")
+                print("Not a valid user type. Please try again.")
 
-# ---------------- INSTRUCTOR MENU ---------------- #
+        elif str(id).startswith("2"):
+            print("Instructor Successfully Logged In!")
+            sql_command = ("SELECT NAME, SURNAME, TITLE, HIREYEAR, DEPT, EMAIL FROM INSTRUCTOR WHERE ID = ?")
+            cursor.execute(sql_command,(id,))
+            name = cursor.fetchone()
+            if name:
+                fname = name[0]
+                lname = name[1]
+                title = name[2]
+                hireyear = name[3]
+                dept = name[4]
+                email = name[5]
+                instructor_obj = instructor.Instructor(fname, lname, id, title, hireyear, dept, email)
+                instructor_menu(instructor_obj)
+            else:
+                print("Not a valid user type. Please try again.")
+
+        elif str(id).startswith("3"):
+            print("Admin Successfully Logged In!")
+            sql_command = ("SELECT NAME, SURNAME FROM ADMIN WHERE ID = ?")
+            cursor.execute(sql_command,(id,))
+            name = cursor.fetchone()
+            if name:
+                fname = name[0]
+                lname = name[1]
+                admin_obj = admin.Admin(fname, lname, id, cursor, cx)
+                admin_menu(admin_obj)
+        else:
+            print("Not a valid user type. Please try again.")
+    else: 
+        print("Credentials Entered are Invalid. Please try again.")
+        
+
+def admin_menu(admin):
+    verify = 0
+    while (verify != 1):
+        choice = int(input(" 1.) Add Course to Course List \n 2.) Remove Course from Course List \n 3.) Add User \n 4.) Remove User \n 5.) Add Instructor\n 6.) Link Instructor to Course \n 7.) Unlink Instructor from Course\n 8.) Add Student to Course \n 9.) Remove Student from Course\n 10.) Logout"))
+        match choice:
+            case 1:
+                admin.add_course()
+            case 2:
+                admin.remove_course()
+            case 3:
+                admin.add_user()
+            case 4: 
+                admin.remove_user()
+            case 5: 
+                admin.add_instructor()
+            case 6:
+                admin.link_prof()
+            case 7:
+                admin.unlink_prof()
+            case 8: 
+                admin.add_to_course()
+            case 9:
+                admin.remove_from_course()
+            case 10:
+                verify = int(input("Are you sure you want to logout?\n 1.) Yes \n 2.) No"))
+                match verify:
+                    case 1:
+                        print("Logging out!\n")
+                        break
+                    case 2: 
+                        print("Returning to menu! \n")
+
 def instructor_menu(instructor):
-    while True:
-        print("\n1.) Search Courses\n2.) Print Course Schedule\n3.) Search Classlist\n4.) Print Classlist\n5.) Logout")
-        option = input()
+    verify = 0
+    while (verify != 1):
+        choice = int(input(" 1.) Search Courses \n 2.) Print Course Schedule \n 3.) Search Classlist \n 4.) Print Classlist \n 5.) Logout "))
+        match choice:
+            case 1:
+                choice1 = int(input("How would you like to search? \n 1.) TITILE \n 2.) CRN"))
+                match choice1:
+                    case 1:
+                        title = str(input("What is the title of your course? (Spaces between words, first letter of each word capital) \n"))
+                        instructor.search_courses(Search_keyword = "TITLE", search_value = title)
+                    case 2:
+                         crn = int(input("What is the CRN of the course you want to view? \n"))
+                         instructor.search_courses(Search_keyword = "CRN", search_value = crn )
+            case 2:
+                instructor.print_schedule()
+            case 3:
+                crn = int(input("What is the CRN of the course you want to search? \n"))
+                instructor.search_roster(crn)
+            case 4: 
+                crn = int(input("What is the CRN of the course roster you want to print? \n"))
+                instructor.search_roster(crn)
+            case 5:
+                verify = int(input("Are you sure you want to logout? \n 1.) Yes \n 2.) No"))
+                match verify:
+                    case 1:
+                        print("Logging out!\n")
+                        break
+                    case 2: 
+                        print("Returning to menu! \n")
 
-        if option == "1":
-            crn = input("Enter CRN to search: ")
-            if crn.isdigit():
-                instructor.search_courses("CRN", int(crn))
-            else:
-                print("Invalid CRN.")
-        elif option == "2":
-            instructor.print_schedule()
-        elif option == "3":
-            crn = input("Enter CRN to search for a specific student: ")
-            if crn.isdigit():
-                instructor.search_roster(int(crn))
-            else:
-                print("Invalid CRN.")
-        elif option == "4":
-            crn = input("Enter CRN to print the full classlist: ")
-            if crn.isdigit():
-                instructor.print_roster(int(crn))
-            else:
-                print("Invalid CRN.")
-        elif option == "5":
-            confirm = input("Are you sure you want to logout?\n1.) Yes\n2.) No\n")
-            if confirm == "1":
-                print("Logging out!")
-                break
-            else:
-                continue
-        else:
-            print("Invalid option. Try again.")
-
-# ---------------- STUDENT MENU ---------------- #
 def student_menu(student):
-    while True:
-        print("\n1.) Print Schedule\n2.) Print Student Info\n3.) Logout")
-        option = input("Choose an option: ")
-
-        if option == "1":
-            student.print_courses()
-        elif option == "2":
-            print(student.print_all_info())
-        elif option == "3":
-            confirm = input("Are you sure you want to logout?\n1.) Yes\n2.) No\n")
-            if confirm == "1":
-                print("Logging out!")
-                break
-            else:
-                continue
-        else:
-            print("Invalid option. Try again.")
+    verify = 0
+    while (verify != 1):
+        choice = int(input(" 1.) Search Courses \n 2.) Add Course to Schedule \n 3.) Remove Course from Schedule\n 4.) Print Schedule \n 5.) Logout "))
+        match choice:
+            case 1:
+                choice1 = int(input("How would you like to search? \n 1.) TITILE \n 2.) CRN"))
+                match choice1:
+                    case 1:
+                        title = str(input("What is the title of your course? (Spaces between words, first letter of each word capital) \n"))
+                        student.search_courses(Search_keyword = "TITLE", search_value = title)
+                    case 2:
+                         crn = int(input("What is the CRN of the course you want to view? \n"))
+                         student.search_courses(Search_keyword = "CRN", search_value = crn)
+            case 2:
+                crn = int(input("What is the CRN of the course you want to add? \n"))
+                       
+                student.add_course(CRN = "CRN", search_value = crn)
+            case 3:
+                student.remove_course()
+            case 4: 
+                student.print_courses()
+            case 5:
+                verify = int(input("Are you sure you want to logout?\n 1.) Yes \n 2.) No"))
+                match verify:
+                    case 1:
+                        print("Logging out!\n")
+                        break
+                    case 2: 
+                        print("Returning to menu! \n")
