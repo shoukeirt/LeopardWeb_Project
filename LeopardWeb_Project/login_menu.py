@@ -131,21 +131,31 @@ def student_menu(student):
                 match choice1:
                     case 1:
                         title = str(input("What is the title of your course? (Spaces between words, first letter of each word capital) \n"))
-                        instructor.search_courses(Search_keyword = "TITLE", search_value = title)
+                        student.search_courses(Search_keyword="TITLE", search_value=title)
                     case 2:
-                         crn = int(input("What is the CRN of the course you want to view? \n"))
-                         instructor.search_courses(Search_keyword = "CRN", search_value = crn)
+                        crn = int(input("What is the CRN of the course you want to view? \n"))
+                        student.search_courses(Search_keyword="CRN", search_value=crn)
+
             case 2:
-                student.add_course()
+                # Prompt the student to enter the CRN of the course to add
+                crn = int(input("What is the CRN of the course you want to add? \n"))
+                student.add_course(CRN="CRN", search_value=crn)
+
             case 3:
-                student.remove_course()
-            case 4: 
-                student.print_schedule()
+                # Prompt the student to enter the CRN of the course to remove
+                crn = int(input("What is the CRN of the course you want to remove? \n"))
+
+                # Take inputted integer CRN
+                student.remove_course(crn)
+
+            case 4:
+                student.print_courses()
+
             case 5:
                 verify = int(input("Are you sure you want to logout?\n 1.) Yes \n 2.) No"))
                 match verify:
                     case 1:
                         print("Logging out!\n")
                         break
-                    case 2: 
+                    case 2:
                         print("Returning to menu! \n")
