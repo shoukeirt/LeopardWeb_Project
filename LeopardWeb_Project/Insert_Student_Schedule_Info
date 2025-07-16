@@ -1,0 +1,279 @@
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Isaac Newton', 7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
+    4670, 'Senior Design', 'T/W/TR', '09:30 AM - 11:00 AM',
+    2025, 'Multivariable Calculus', 'M/T/R', '11:00 AM - 12:00 PM',
+    4025, 'Hardware Seciruty', 'T/F', '02:00 PM - 03:30 PM',
+    3250, 'Analog Circuit Design ', 'T/W/R', '03:30 PM - 04:45 PM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Marie Curie', 2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM',
+    3999, 'Engineering Electromagnetics', 'M/W/F', '11:00 AM - 12:15 PM',
+    4670, 'Senior Design', 'T/W/TR', '09:30 AM - 11:00 AM',
+    2000, 'Statics and Mechanics I ', 'T/R', '01:00 PM - 02:15 PM',
+    4075, 'Engineering Operating Systems', 'M/W', '03:00 PM - 04:45 PM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Nikola Tesla', 4025, 'Hardware Seciruty', 'T/F', '02:00 PM - 03:30 PM',
+    4670, 'Senior Design', 'T/W/TR', '09:30 AM - 11:00 AM',
+    7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
+    2025, 'Multivariable Calculus', 'M/T/R', '11:00 AM - 12:00 PM',
+    3250, 'Analog Circuit Design ', 'T/W/R', '03:30 PM - 04:45 PM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Thomas Edison', 2000, 'Statics and Mechanics I ', 'T/R', '01:00 PM - 02:15 PM',
+    3200, 'Advanced Digital Circuit Design', 'M/W/R', '09:30 AM - 11:00 AM',
+    7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
+    2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM',
+    4075, 'Engineering Operating Systems', 'M/W', '03:00 PM - 04:45 PM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'John von Neumann', 2000, 'Statics and Mechanics I ', 'T/R', '01:00 PM - 02:15 PM',
+    3200, 'Engineering Economy ', 'T/R', '09:30 AM - 10:45 AM',
+    2025, 'Multivariable Calculus', 'M/T/R', '11:00 AM - 12:00 PM',
+    7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
+    2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Grace Hopper', 2000, 'Statics and Mechanics I ', 'T/R', '01:00 PM - 02:15 PM',
+    2025, 'Multivariable Calculus', 'M/T/R', '11:00 AM - 12:00 PM',
+    2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM',
+    3200, 'Engineering Economy ', 'T/R', '09:30 AM - 10:45 AM',
+    7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Mae Jemison', 2750, 'Computer Engineering II', 'T/W/TR', '10:30 AM - 11:30 AM',
+    4075, 'Engineering Operating Systems', 'M/W', '03:00 PM - 04:45 PM',
+    5800, 'Mathematical Methods', 'T/R', '01:00 PM - 02:15 PM',
+    7101, 'Professional Perspectives', 'M/F', '10:00 AM - 11:45 AM',
+    2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Mark Dea', 4075, 'Engineering Operating Systems', 'M/W', '03:00 PM - 04:45 PM',
+    3725, 'English III', 'M/T/F', '02:00 PM - 03:00 PM',
+    7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
+    2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM',
+    7101, 'Professional Perspectives', 'M/F', '10:00 AM - 11:45 AM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Michael Faraday', 2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM',
+    3999, 'Engineering Electromagnetics', 'M/W/F', '11:00 AM - 12:15 PM',
+    3250, 'Analog Circuit Design ', 'T/W/R', '03:30 PM - 04:45 PM',
+    7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
+    4670, 'Senior Design', 'T/W/TR', '09:30 AM - 11:00 AM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Ada Lovelace', 2000, 'Statics and Mechanics I ', 'T/R', '01:00 PM - 02:15 PM',
+    2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM',
+    2750, 'Computer Engineering II', 'T/W/TR', '10:30 AM - 11:30 AM',
+    7101, 'Professional Perspectives', 'M/F', '10:00 AM - 11:45 AM',
+    4075, 'Engineering Operating Systems', 'M/W', '03:00 PM - 04:45 PM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Anthony Magliozzi', 2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM',
+    3250, 'Analog Circuit Design ', 'T/W/R', '03:30 PM - 04:45 PM',
+    3200, 'Engineering Economy ', 'T/R', '09:30 AM - 10:45 AM',
+    3999, 'Engineering Electromagnetics', 'M/W/F', '11:00 AM - 12:15 PM',
+    2000, 'Statics and Mechanics I ', 'T/R', '01:00 PM - 02:15 PM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'To Jo', 2025, 'Multivariable Calculus', 'M/T/R', '11:00 AM - 12:00 PM',
+    7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
+    3250, 'Analog Circuit Design ', 'T/W/R', '03:30 PM - 04:45 PM',
+    3725, 'English III', 'M/T/F', '02:00 PM - 03:00 PM',
+    3200, 'Advanced Digital Circuit Design', 'M/W/R', '09:30 AM - 11:00 AM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Jalen Brown', 3150, 'Object Oriented Programming ', 'M/W/F', '02:30 PM - 03:45 PM',
+    2000, 'Statics and Mechanics I ', 'T/R', '01:00 PM - 02:15 PM',
+    7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
+    3999, 'Engineering Electromagnetics', 'M/W/F', '11:00 AM - 12:15 PM',
+    3200, 'Advanced Digital Circuit Design', 'M/W/R', '09:30 AM - 11:00 AM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Marcus Smart', 4025, 'Hardware Seciruty', 'T/F', '02:00 PM - 03:30 PM',
+    3200, 'Engineering Economy ', 'T/R', '09:30 AM - 10:45 AM',
+    7101, 'Professional Perspectives', 'M/F', '10:00 AM - 11:45 AM',
+    4075, 'Engineering Operating Systems', 'M/W', '03:00 PM - 04:45 PM',
+    2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Mason Moore', 2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM',
+    3725, 'English III', 'M/T/F', '02:00 PM - 03:00 PM',
+    3999, 'Engineering Electromagnetics', 'M/W/F', '11:00 AM - 12:15 PM',
+    3250, 'Analog Circuit Design ', 'T/W/R', '03:30 PM - 04:45 PM',
+    7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Ryan Irwin', 3150, 'Object Oriented Programming ', 'M/W/F', '02:30 PM - 03:45 PM',
+    4670, 'Senior Design', 'T/W/TR', '09:30 AM - 11:00 AM',
+    2000, 'Statics and Mechanics I ', 'T/R', '01:00 PM - 02:15 PM',
+    7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
+    2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Taylor Lawrence', 3200, 'Engineering Economy ', 'T/R', '09:30 AM - 10:45 AM',
+    3250, 'Analog Circuit Design ', 'T/W/R', '03:30 PM - 04:45 PM',
+    4025, 'Hardware Seciruty', 'T/F', '02:00 PM - 03:30 PM',
+    7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
+    2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Owen Wilson', 7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
+    2000, 'Statics and Mechanics I ', 'T/R', '01:00 PM - 02:15 PM',
+    3200, 'Engineering Economy ', 'T/R', '09:30 AM - 10:45 AM',
+    7101, 'Professional Perspectives', 'M/F', '10:00 AM - 11:45 AM',
+    3150, 'Object Oriented Programming ', 'M/W/F', '02:30 PM - 03:45 PM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Peter Parker', 7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
+    3250, 'Analog Circuit Design ', 'T/W/R', '03:30 PM - 04:45 PM',
+    2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM',
+    4670, 'Senior Design', 'T/W/TR', '09:30 AM - 11:00 AM',
+    3725, 'English III', 'M/T/F', '02:00 PM - 03:00 PM'
+);
+
+INSERT INTO student_schedule (
+    StudentName, CRN1, Course1, DOW1, Time1,
+    CRN2, Course2, DOW2, Time2,
+    CRN3, Course3, DOW3, Time3,
+    CRN4, Course4, DOW4, Time4,
+    CRN5, Course5, DOW5, Time5
+) VALUES (
+    'Tom Brady', 4025, 'Hardware Seciruty', 'T/F', '02:00 PM - 03:30 PM',
+    4075, 'Engineering Operating Systems', 'M/W', '03:00 PM - 04:45 PM',
+    3200, 'Engineering Economy ', 'T/R', '09:30 AM - 10:45 AM',
+    7101, 'Professional Perspectives', 'M/F', '10:00 AM - 11:45 AM',
+    7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM'
+);
