@@ -1,4 +1,23 @@
-INSERT INTO student_schedule (
+import sqlite3
+
+# Connect to the SQLite database
+conn = sqlite3.connect("assignment3.db")
+cursor = conn.cursor()
+
+# Create the student_schedule table if it does not exist
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS student_schedule (
+    StudentName TEXT,
+    CRN1 INTEGER, Course1 TEXT, DOW1 TEXT, Time1 TEXT,
+    CRN2 INTEGER, Course2 TEXT, DOW2 TEXT, Time2 TEXT,
+    CRN3 INTEGER, Course3 TEXT, DOW3 TEXT, Time3 TEXT,
+    CRN4 INTEGER, Course4 TEXT, DOW4 TEXT, Time4 TEXT,
+    CRN5 INTEGER, Course5 TEXT, DOW5 TEXT, Time5 TEXT
+);
+""")
+
+# Insert statements
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -10,9 +29,9 @@ INSERT INTO student_schedule (
     2025, 'Multivariable Calculus', 'M/T/R', '11:00 AM - 12:00 PM',
     4025, 'Hardware Seciruty', 'T/F', '02:00 PM - 03:30 PM',
     3250, 'Analog Circuit Design ', 'T/W/R', '03:30 PM - 04:45 PM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -24,9 +43,9 @@ INSERT INTO student_schedule (
     4670, 'Senior Design', 'T/W/TR', '09:30 AM - 11:00 AM',
     2000, 'Statics and Mechanics I ', 'T/R', '01:00 PM - 02:15 PM',
     4075, 'Engineering Operating Systems', 'M/W', '03:00 PM - 04:45 PM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -38,9 +57,9 @@ INSERT INTO student_schedule (
     7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
     2025, 'Multivariable Calculus', 'M/T/R', '11:00 AM - 12:00 PM',
     3250, 'Analog Circuit Design ', 'T/W/R', '03:30 PM - 04:45 PM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -52,9 +71,9 @@ INSERT INTO student_schedule (
     7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
     2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM',
     4075, 'Engineering Operating Systems', 'M/W', '03:00 PM - 04:45 PM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -66,9 +85,9 @@ INSERT INTO student_schedule (
     2025, 'Multivariable Calculus', 'M/T/R', '11:00 AM - 12:00 PM',
     7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
     2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -80,9 +99,9 @@ INSERT INTO student_schedule (
     2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM',
     3200, 'Engineering Economy ', 'T/R', '09:30 AM - 10:45 AM',
     7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -94,9 +113,9 @@ INSERT INTO student_schedule (
     5800, 'Mathematical Methods', 'T/R', '01:00 PM - 02:15 PM',
     7101, 'Professional Perspectives', 'M/F', '10:00 AM - 11:45 AM',
     2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -108,9 +127,9 @@ INSERT INTO student_schedule (
     7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
     2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM',
     7101, 'Professional Perspectives', 'M/F', '10:00 AM - 11:45 AM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -122,9 +141,9 @@ INSERT INTO student_schedule (
     3250, 'Analog Circuit Design ', 'T/W/R', '03:30 PM - 04:45 PM',
     7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
     4670, 'Senior Design', 'T/W/TR', '09:30 AM - 11:00 AM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -136,9 +155,9 @@ INSERT INTO student_schedule (
     2750, 'Computer Engineering II', 'T/W/TR', '10:30 AM - 11:30 AM',
     7101, 'Professional Perspectives', 'M/F', '10:00 AM - 11:45 AM',
     4075, 'Engineering Operating Systems', 'M/W', '03:00 PM - 04:45 PM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -150,9 +169,9 @@ INSERT INTO student_schedule (
     3200, 'Engineering Economy ', 'T/R', '09:30 AM - 10:45 AM',
     3999, 'Engineering Electromagnetics', 'M/W/F', '11:00 AM - 12:15 PM',
     2000, 'Statics and Mechanics I ', 'T/R', '01:00 PM - 02:15 PM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -164,9 +183,9 @@ INSERT INTO student_schedule (
     3250, 'Analog Circuit Design ', 'T/W/R', '03:30 PM - 04:45 PM',
     3725, 'English III', 'M/T/F', '02:00 PM - 03:00 PM',
     3200, 'Advanced Digital Circuit Design', 'M/W/R', '09:30 AM - 11:00 AM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -178,9 +197,9 @@ INSERT INTO student_schedule (
     7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
     3999, 'Engineering Electromagnetics', 'M/W/F', '11:00 AM - 12:15 PM',
     3200, 'Advanced Digital Circuit Design', 'M/W/R', '09:30 AM - 11:00 AM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -192,9 +211,9 @@ INSERT INTO student_schedule (
     7101, 'Professional Perspectives', 'M/F', '10:00 AM - 11:45 AM',
     4075, 'Engineering Operating Systems', 'M/W', '03:00 PM - 04:45 PM',
     2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -206,9 +225,9 @@ INSERT INTO student_schedule (
     3999, 'Engineering Electromagnetics', 'M/W/F', '11:00 AM - 12:15 PM',
     3250, 'Analog Circuit Design ', 'T/W/R', '03:30 PM - 04:45 PM',
     7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -220,9 +239,9 @@ INSERT INTO student_schedule (
     2000, 'Statics and Mechanics I ', 'T/R', '01:00 PM - 02:15 PM',
     7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
     2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -234,9 +253,9 @@ INSERT INTO student_schedule (
     4025, 'Hardware Seciruty', 'T/F', '02:00 PM - 03:30 PM',
     7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM',
     2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -248,9 +267,9 @@ INSERT INTO student_schedule (
     3200, 'Engineering Economy ', 'T/R', '09:30 AM - 10:45 AM',
     7101, 'Professional Perspectives', 'M/F', '10:00 AM - 11:45 AM',
     3150, 'Object Oriented Programming ', 'M/W/F', '02:30 PM - 03:45 PM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -262,9 +281,9 @@ INSERT INTO student_schedule (
     2850, 'Microcontrollers Using C', 'T/R/F', '08:00 AM - 09:15 AM',
     4670, 'Senior Design', 'T/W/TR', '09:30 AM - 11:00 AM',
     3725, 'English III', 'M/T/F', '02:00 PM - 03:00 PM'
-);
+);""")
 
-INSERT INTO student_schedule (
+cursor.execute("""INSERT INTO student_schedule (
     StudentName, CRN1, Course1, DOW1, Time1,
     CRN2, Course2, DOW2, Time2,
     CRN3, Course3, DOW3, Time3,
@@ -276,4 +295,8 @@ INSERT INTO student_schedule (
     3200, 'Engineering Economy ', 'T/R', '09:30 AM - 10:45 AM',
     7101, 'Professional Perspectives', 'M/F', '10:00 AM - 11:45 AM',
     7100, 'Project Management Applications', 'W/F', '12:30 PM - 01:45 PM'
-);
+);""")
+
+
+conn.commit()
+conn.close()
