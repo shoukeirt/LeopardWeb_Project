@@ -2,10 +2,16 @@
 #Updated and Fixed and Implemented by Anthony Magliozzi
 
 import sqlite3
-from user import User
+import tkinter as tk
+from tkinter import messagebox, simpledialog, scrolledtext
+from user import User # Assuming User class is in user.py
+
+# Database path
+DB_PATH = "assignment3.db"
+
 import datetime
-cx = sqlite3.connect("assignment3.db", timeout=5.0)
-cursor = cx.cursor()
+#cx = sqlite3.connect("assignment3.db", timeout=5.0)
+#cursor = cx.cursor()
 
 # Utility function to split a time range string (e.g., '2:30 PM - 4:00 PM') into start and end time objects
 def slipt_time(time_str):
@@ -173,3 +179,216 @@ class Student(User):
 
         cx.close()
         return rows
+
+
+
+
+
+class StudentMenu(tk.Toplevel):
+    def __init__(self, master, student_obj):
+        """
+        Initializes the StudentMenu GUI window.
+        
+        Args:
+            master: The parent Tkinter window (e.g., the login window).
+            student_obj: An instance of the Instructor class.
+        """
+        super().__init__(master)
+        self.master = master
+        self.student = student_obj
+        self.title(f"Student Menu - {self.student.firstName} {self.student.lastName}")
+        self.geometry("600x400") # Set a default size for the window
+        self.create_widgets()
+
+    def create_widgets(self):
+        """
+        Creates and arranges the GUI widgets for the student menu.
+        """
+        # Clear any existing widgets
+        for widget in self.winfo_children():
+            widget.destroy()
+
+        self.main_frame = tk.Frame(self, padx=20, pady=20)
+        self.main_frame.pack(expand=True, fill="both")
+
+        welcome_label = tk.Label(self.main_frame, text=f"Welcome, {self.student.firstName} {self.student.lastName}!", font=("Arial", 16, "bold"))
+        welcome_label.pack(pady=10)
+
+        # Buttons for student actions
+        btn_search_courses = tk.Button(self.main_frame, text="Search Courses", command=self.show_search_courses_menu, width=30, height=2)
+        btn_search_courses.pack(pady=5)
+
+        btn_print_schedule = tk.Button(self.main_frame, text="Print Course Schedule", command=self.display_schedule, width=30, height=2)
+        btn_print_schedule.pack(pady=5)
+
+        #add/remove course   #Time conflict is inside this funciton since adding a course involves checking for time conflicts
+        btn_ar_course = tk.Button(self.main_frame, text="Add/Remove Courses from Schedule", command=self.show_ar_course_menu, width=30, height=2)
+        btn_ar_course.pack(pady=5)
+
+
+        btn_logout = tk.Button(self.main_frame, text="Logout", command=self.logout, width=30, height=2, bg="red", fg="white")
+        btn_logout.pack(pady=20)
+
+    def show_search_courses_menu(self):
+        """
+        Displays the menu for searching courses.
+        """
+        self.clear_main_frame()
+        
+        # Labels and entry for search keyword and value
+        tk.Label(self.main_frame, text="Search Courses", font=("Arial", 14, "bold")).pack(pady=10)
+
+        tk.Label(self.main_frame, text="Search by:").pack()
+        self.search_by_var = tk.StringVar(self.main_frame)
+        self.search_by_var.set("CRN") # default value
+        search_by_option = tk.OptionMenu(self.main_frame, self.search_by_var, "CRN", "TITLE")
+        search_by_option.pack(pady=5)
+
+        tk.Label(self.main_frame, text="Search Value:").pack()
+        self.search_value_entry = tk.Entry(self.main_frame, width=40)
+        self.search_value_entry.pack(pady=5)
+
+        btn_search = tk.Button(self.main_frame, text="Search", command=self.perform_search_courses, width=20)
+        btn_search.pack(pady=10)
+
+        self.result_text = scrolledtext.ScrolledText(self.main_frame, width=70, height=10, wrap=tk.WORD)
+        self.result_text.pack(pady=10)
+
+        btn_back = tk.Button(self.main_frame, text="Back to Main Menu", command=self.create_widgets, width=20)
+        btn_back.pack(pady=10)
+
+    def perform_search_courses(self):
+        """
+        Performs the course search based on user input and displays results.
+        """
+        search_keyword = self.search_by_var.get()
+        search_value = self.search_value_entry.get().strip()
+
+        if not search_value:
+            messagebox.showwarning("Input Error", "Please enter a search value.")
+            return
+
+        # Attempt to convert CRN to int if selected
+        if search_keyword == "CRN":
+            try:
+                search_value = int(search_value)
+            except ValueError:
+                messagebox.showerror("Input Error", "CRN must be a number.")
+                return
+
+        result = self.student.search_courses(search_keyword, search_value)
+        self.result_text.delete(1.0, tk.END) # Clear previous results
+        self.result_text.insert(tk.END, result)
+
+
+    def display_schedule(self):
+        """
+        Displays the student's course schedule.
+        """
+        self.clear_main_frame()
+
+        tk.Label(self.main_frame, text="Your Course Schedule", font=("Arial", 14, "bold")).pack(pady=10)
+
+        result = self.student.print_schedule()
+        self.result_text = scrolledtext.ScrolledText(self.main_frame, width=70, height=15, wrap=tk.WORD)
+        self.result_text.insert(tk.END, result)
+        self.result_text.config(state=tk.DISABLED) # Make text read-only
+        self.result_text.pack(pady=10)
+
+        btn_back = tk.Button(self.main_frame, text="Back to Main Menu", command=self.create_widgets, width=20)
+        btn_back.pack(pady=10)
+
+    def show_search_classlist_menu(self):
+        """
+        Displays the menu for searching a student in a classlist.
+        """
+        self.clear_main_frame()
+
+        tk.Label(self.main_frame, text="Search Student in Classlist", font=("Arial", 14, "bold")).pack(pady=10)
+
+        tk.Label(self.main_frame, text="Enter Course CRN:").pack()
+        self.crn_entry_search_roster = tk.Entry(self.main_frame, width=20)
+        self.crn_entry_search_roster.pack(pady=5)
+
+        btn_search = tk.Button(self.main_frame, text="Search Student", command=self.perform_search_classlist, width=20)
+        btn_search.pack(pady=10)
+
+        self.result_label_search_roster = tk.Label(self.main_frame, text="", wraplength=400)
+        self.result_label_search_roster.pack(pady=10)
+
+        btn_back = tk.Button(self.main_frame, text="Back to Main Menu", command=self.create_widgets, width=20)
+        btn_back.pack(pady=10)
+
+    def perform_search_classlist(self):
+        """
+        Performs the search for a student in a classlist and displays the result.
+        """
+        crn_str = self.crn_entry_search_roster.get().strip()
+        if not crn_str:
+            messagebox.showwarning("Input Error", "Please enter a CRN.")
+            return
+        try:
+            crn = int(crn_str)
+        except ValueError:
+            messagebox.showerror("Input Error", "CRN must be a number.")
+            return
+        
+        result = self.student.search_roster(crn)
+        self.result_label_search_roster.config(text=result)
+
+
+    def show_print_classlist_menu(self):
+        """
+        Displays the menu for printing a classlist.
+        """
+        self.clear_main_frame()
+
+        tk.Label(self.main_frame, text="Print Classlist", font=("Arial", 14, "bold")).pack(pady=10)
+
+        tk.Label(self.main_frame, text="Enter Course CRN:").pack()
+        self.crn_entry_print_roster = tk.Entry(self.main_frame, width=20)
+        self.crn_entry_print_roster.pack(pady=5)
+
+        btn_print = tk.Button(self.main_frame, text="Print Roster", command=self.perform_print_classlist, width=20)
+        btn_print.pack(pady=10)
+
+        self.result_text_print_roster = scrolledtext.ScrolledText(self.main_frame, width=70, height=15, wrap=tk.WORD)
+        self.result_text_print_roster.pack(pady=10)
+
+        btn_back = tk.Button(self.main_frame, text="Back to Main Menu", command=self.create_widgets, width=20)
+        btn_back.pack(pady=10)
+
+    def perform_print_classlist(self):
+        """
+        Performs the printing of a classlist and displays the result.
+        """
+        crn_str = self.crn_entry_print_roster.get().strip()
+        if not crn_str:
+            messagebox.showwarning("Input Error", "Please enter a CRN.")
+            return
+        try:
+            crn = int(crn_str)
+        except ValueError:
+            messagebox.showerror("Input Error", "CRN must be a number.")
+            return
+        
+        result = self.student.print_roster(crn)
+        self.result_text_print_roster.delete(1.0, tk.END)
+        self.result_text_print_roster.insert(tk.END, result)
+
+
+    def logout(self):
+        """
+        Handles the logout process, closing the student menu and showing the login window.
+        """
+        if messagebox.askyesno("Logout", "Are you sure you want to logout?"):
+            self.destroy() # Close the student menu window
+            self.master.deiconify() # Show the login window again
+            messagebox.showinfo("Logout", "Logged out successfully.")
+
+    def clear_main_frame(self):
+        """
+        Clears all widgets from the main frame to switch views.
+        """
+        for widget in self.main_frame.winfo_children():
+            widget.destroy()
