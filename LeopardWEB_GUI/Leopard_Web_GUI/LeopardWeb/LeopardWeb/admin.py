@@ -436,29 +436,44 @@ class Admin(User):
                 return f"Error: Student with ID {student_id} not found."
             student_full_name = f"{student_data[0]} {student_data[1]}"
 
-            # Check if course exists
-            self.cursor.execute("SELECT * FROM COURSES WHERE CRN = ?", (crn,))
-            if not self.cursor.fetchone():
+            # Check if course exists and retrieve its details using the correct 'DAYS' column name
+            self.cursor.execute("SELECT Title, DAYS, TIME FROM COURSES WHERE CRN = ?", (crn,))
+            course_data = self.cursor.fetchone()
+            if not course_data:
                 return f"Error: Course with CRN {crn} not found."
+        
+            course_title, course_days, course_time = course_data
 
             # Check if student is already in Student_Schedule or needs a new entry
-            self.cursor.execute("SELECT * FROM Student_Schedule WHERE StudentName = ?", (student_full_name,))
+            self.cursor.execute("SELECT CRN1, CRN2, CRN3, CRN4 FROM Student_Schedule WHERE StudentName = ?", (student_full_name,))
             student_schedule = self.cursor.fetchone()
 
             if student_schedule:
                 # Check for available slot and if already enrolled
-                for i in range(1, 5): # Check CRN1 to CRN4
+                for i in range(4): 
+                    # Check for existing enrollment by CRN
                     if student_schedule[i] == crn:
                         return f"Error: Student {student_full_name} is already enrolled in CRN {crn}."
+                
+                    # Found an empty slot based on CRN being NULL
                     if student_schedule[i] is None:
-                        # Found an empty slot, enroll student
-                        self.cursor.execute(f"UPDATE Student_Schedule SET CRN{i} = ? WHERE StudentName = ?", (crn, student_full_name))
+                        # Enroll student with full details, updating the correct columns
+                        update_query = f"""
+                            UPDATE Student_Schedule 
+                            SET CRN{i+1} = ?, COURSE{i+1} = ?, DOW{i+1} = ?, TIME{i+1} = ? 
+                            WHERE StudentName = ?
+                        """
+                        self.cursor.execute(update_query, (crn, course_title, course_days, course_time, student_full_name))
                         self.cx.commit()
                         return f"Student {student_full_name} enrolled in CRN {crn} successfully."
+            
                 return f"Error: Student {student_full_name} is already enrolled in 4 courses and cannot add more."
             else:
-                # New student entry in Student_Schedule
-                self.cursor.execute("INSERT INTO Student_Schedule (StudentName, CRN1) VALUES (?, ?)", (student_full_name, crn))
+                # New student entry with full course details
+                self.cursor.execute("""
+                    INSERT INTO Student_Schedule (StudentName, CRN1, COURSE1, DOW1, TIME1) 
+                    VALUES (?, ?, ?, ?, ?)
+                """, (student_full_name, crn, course_title, course_days, course_time))
                 self.cx.commit()
                 return f"Student {student_full_name} enrolled in CRN {crn} successfully (new schedule created)."
         except sqlite3.Error as e:
@@ -491,10 +506,14 @@ class Admin(User):
             if schedule:
                 # Check if the student is enrolled in the given CRN
                 found_and_removed = False
-                for i in range(4): # Iterate through CRN1 to CRN4 columns
+                for i in range(5): # Iterate through CRN1 to CRN4 columns
                     if schedule[i] == crn:
                         # Set the CRN slot to NULL
-                        self.cursor.execute(f"UPDATE Student_Schedule SET CRN{i+1} = NULL WHERE StudentName = ?", (student_full_name,))
+                        self.cursor.execute(f"""
+                        UPDATE Student_Schedule 
+                        SET CRN{i+1} = NULL, COURSE{i+1} = NULL, DOW{i+1} = NULL, TIME{i+1} = NULL
+                        WHERE StudentName = ?
+                    """, (student_full_name,))
                         found_and_removed = True
                         break
                 
