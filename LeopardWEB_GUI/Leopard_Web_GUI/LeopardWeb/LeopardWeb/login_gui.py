@@ -1,18 +1,19 @@
 import tkinter as tk
 from tkinter import *
-from tkinter import messagebox, simpledialog # Add simpledialog here
+from tkinter import messagebox, simpledialog 
 import user
 import student
 import instructor 
-import admin
-# from login_menu import * # This import is no longer needed as login_menu is handled by login_gui directly
+import admin # Ensure admin module is imported
 import sqlite3
-import random # For generating random passwords
+import random 
 
 # Import the InstructorMenu class from instructor.py
 from instructor import InstructorMenu 
 # Import the StudentMenu class from student.py
 from student import StudentMenu 
+# Import the AdminMenu class from admin.py
+from admin import AdminMenu # ADD THIS LINE
 
 # Connect to the database
 cx = sqlite3.connect("assignment3.db")
@@ -21,138 +22,119 @@ cursor = cx.cursor()
 # Your existing GUI setup
 login_menu = tk.Tk()
 login_menu.title("Login to Leopard Web")
-Label(login_menu, text="Email").grid(row=0, column=0, padx=10, pady=5, sticky="w") # Changed label to Email
+Label(login_menu, text="Email").grid(row=0, column=0, padx=10, pady=5, sticky="w") 
 Label(login_menu, text="Password (#### Format)").grid(row=1, column=0, padx=10, pady=5, sticky="w")
 entry1 = Entry(login_menu, width=30)
-entry2 = Entry(login_menu, show="*", width=30)  # Hide password
+entry2 = Entry(login_menu, show="*", width=30)  
 entry1.grid(row=0, column=1, padx=10, pady=5)
 entry2.grid(row=1, column=1, padx=10, pady=5)
+
+def generate_unique_password():
+    """Generates a unique 4-digit password."""
+    while True:
+        password = random.randint(1000, 9999)
+        # Check if password already exists in the database
+        cursor.execute("SELECT ID FROM LOGIN WHERE PASSWORD = ?", (password,))
+        if not cursor.fetchone():
+            return password
 
 def login_gui_handler():
     """
     Handles the login logic for the GUI.
+    Authenticates user based on email and password, then launches
+    the appropriate menu (Student, Instructor, or Admin).
     """
-    email_input = entry1.get().strip() # Changed to email_input
-    password_str = entry2.get().strip()
+    email_input = entry1.get().strip()
+    password_input = entry2.get().strip()
 
-    if not email_input or not password_str: # Changed to email_input
-        messagebox.showwarning("Input Error", "Please enter both email and password.") # Changed message
+    if not email_input or not password_input:
+        messagebox.showwarning("Input Error", "Please enter both email and password.")
         return
 
     try:
-        password = int(password_str)
+        password_input = int(password_input)
     except ValueError:
-        messagebox.showerror("Input Error", "Password must be a number (#### Format).")
+        messagebox.showerror("Login Error", "Password must be a 4-digit number.")
         return
-    
-    # Updated SQL command to query by EMAIL instead of ID
-    sql_command = ("""SELECT ID FROM LOGIN WHERE EMAIL = ? AND PASSWORD = ?""")
-    cursor.execute(sql_command,(email_input, password)) # Changed to email_input
+
+    sql_command = "SELECT ID FROM LOGIN WHERE EMAIL = ? AND PASSWORD = ?"
+    cursor.execute(sql_command, (email_input, password_input))
     result = cursor.fetchone()
 
     if result:
-        user_id = result[0] # The ID is the first element in the LOGIN table.
+        user_id = result[0]
         
-        if str(user_id).startswith("1"): # Student
-            messagebox.showinfo("Success", "Student Successfully Logged In!")
-            sql_command = ("SELECT NAME, SURNAME FROM STUDENT WHERE ID = ?")
-            cursor.execute(sql_command,(user_id,))
-            name = cursor.fetchone()
-            if name:
-                fname = name[0]
-                lname = name[1]
+        # Determine user type based on ID prefix
+        if str(user_id).startswith("1"):  # Student ID starts with 1
+            messagebox.showinfo("Login Success", "Student Successfully Logged In!")
+            sql_command = "SELECT NAME, SURNAME, GRADYEAR, MAJOR, EMAIL FROM STUDENT WHERE ID = ?"
+            cursor.execute(sql_command, (user_id,))
+            student_data = cursor.fetchone()
+            if student_data:
+                fname, lname, grad_year, major, email = student_data
                 student_obj = student.Student(fname, lname, user_id)
-                login_menu.withdraw() # Hide login window
-
-                # Open the Student GUI menu
-                student_gui_window = StudentMenu(login_menu, student_obj)
-                student_gui_window.protocol("WM_DELETE_WINDOW", lambda: on_student_menu_close(student_gui_window)) # Handle window close
-
-
+                
+                # Hide login menu and open student menu
+                login_menu.withdraw()
+                StudentMenu(login_menu, student_obj)
             else:
-                messagebox.showerror("Error", "Not a valid student user. Please try again.")
-       
-        elif str(user_id).startswith("2"): # Instructor
-            messagebox.showinfo("Success", "Instructor Successfully Logged In!")
-            sql_command = ("SELECT NAME, SURNAME, TITLE, HIREYEAR, DEPT, EMAIL FROM INSTRUCTOR WHERE ID = ?")
-            cursor.execute(sql_command,(user_id,))
-            name = cursor.fetchone()
-            if name:
-                fname = name[0]
-                lname = name[1]
-                title = name[2]
-                hireyear = name[3]
-                dept = name[4]
-                email = name[5]
+                messagebox.showerror("Login Error", "Student data not found for this ID.")
+
+        elif str(user_id).startswith("2"):  # Instructor ID starts with 2
+            messagebox.showinfo("Login Success", "Instructor Successfully Logged In!")
+            sql_command = "SELECT NAME, SURNAME, TITLE, HIREYEAR, DEPT, EMAIL FROM INSTRUCTOR WHERE ID = ?"
+            cursor.execute(sql_command, (user_id,))
+            instructor_data = cursor.fetchone()
+            if instructor_data:
+                fname, lname, title, hireyear, dept, email = instructor_data
                 instructor_obj = instructor.Instructor(fname, lname, user_id, title, hireyear, dept, email)
-                login_menu.withdraw() # Hide login window
-                # Open the instructor GUI menu
-                instructor_gui_window = InstructorMenu(login_menu, instructor_obj)
-                instructor_gui_window.protocol("WM_DELETE_WINDOW", lambda: on_instructor_menu_close(instructor_gui_window)) # Handle window close
+                
+                # Hide login menu and open instructor menu
+                login_menu.withdraw()
+                InstructorMenu(login_menu, instructor_obj)
             else:
-                messagebox.showerror("Error", "Not a valid instructor user. Please try again.")
-        
-        elif str(user_id).startswith("3"): # Admin
-            messagebox.showinfo("Success", "Admin Successfully Logged In!")
-            sql_command = ("SELECT NAME, SURNAME FROM ADMIN WHERE ID = ?")
-            cursor.execute(sql_command,(user_id,))
-            name = cursor.fetchone()
-            if name:
-                fname = name[0]
-                lname = name[1]
-                admin_obj = admin.Admin(fname, lname, user_id, cursor, cx)
-                login_menu.withdraw() # Hide login window
-                # Assuming admin_menu is defined elsewhere or will be implemented
-                # admin_menu(admin_obj)
-                messagebox.showinfo("Feature Coming Soon", "Admin menu is not yet implemented with GUI.")
-                login_menu.deiconify() # Show login window again for now
+                messagebox.showerror("Login Error", "Instructor data not found for this ID.")
+
+        elif str(user_id).startswith("3"):  # Admin ID starts with 3
+            messagebox.showinfo("Login Success", "Admin Successfully Logged In!")
+            sql_command = "SELECT NAME, SURNAME FROM ADMIN WHERE ID = ?"
+            cursor.execute(sql_command, (user_id,))
+            admin_data = cursor.fetchone()
+            if admin_data:
+                fname, lname = admin_data
+                # Create an Admin object (passing cursor and cx for database operations)
+                admin_obj = admin.Admin(fname, lname, user_id, cursor, cx) # Pass cursor and cx
+
+                # Hide login menu and open admin menu
+                login_menu.withdraw()
+                AdminMenu(login_menu, admin_obj) # LAUNCH THE ADMIN GUI HERE
             else:
-                messagebox.showerror("Error", "Not a valid admin user. Please try again.")
+                messagebox.showerror("Login Error", "Admin data not found for this ID.")
         else:
-            messagebox.showerror("Error", "Not a valid user type. Please try again.")
-    else: 
-        messagebox.showerror("Error", "Credentials Entered are Invalid. Please try again.")
+            messagebox.showerror("Login Error", "Invalid user ID type.")
+    else:
+        messagebox.showerror("Login Failed", "Invalid Email or Password.")
 
-def on_instructor_menu_close(instructor_gui_window):
-    """
-    Handles the closing of the instructor menu window.
-    """
-    instructor_gui_window.destroy()
-    login_menu.deiconify() # Show the login window again
-
-
-def on_student_menu_close(student_gui_window):
-    """
-    Handles the closing of the student menu window.
-    """
-    student_gui_window.destroy()
-    login_menu.deiconify() # Show the login window again
-
-def generate_unique_password():
-    """Generates a unique 4-digit password not present in the LOGIN table."""
-    while True:
-        new_password = random.randint(1000, 9999)
-        cursor.execute("SELECT PASSWORD FROM LOGIN WHERE PASSWORD = ?", (new_password,))
-        if cursor.fetchone() is None:
-            return new_password
 
 def forgot_password():
-    email_input = simpledialog.askstring("Forgot Password", "Please enter your Email:") # Changed prompt to Email
-    if email_input is None: # User cancelled
+    """
+    Handles the forgot/reset password functionality.
+    Prompts for email, verifies it, generates a new password,
+    updates it in the database, and displays the new password.
+    """
+    email_input = simpledialog.askstring("Forgot Password", "Enter your email:")
+    if not email_input:
         return
 
-    email_input = email_input.strip()
-
     try:
-        # Find the user's ID and current password (from the LOGIN table)
         cursor.execute("SELECT ID FROM LOGIN WHERE EMAIL = ?", (email_input,))
-        result = cursor.fetchone()
+        user_info = cursor.fetchone()
 
-        if result:
-            user_id = result[0]
+        if user_info:
+            user_id = user_info[0]
             
-            # Determine the correct table based on the ID prefix
-            table_name = None
+            # Determine user type to ensure email belongs to a valid user type
+            table_name = ""
             if str(user_id).startswith("1"):
                 table_name = "STUDENT"
             elif str(user_id).startswith("2"):
@@ -183,8 +165,7 @@ login_button.grid(row=2, columnspan=2, pady=15)
 
 # Forgot Password button
 forgot_password_button = Button(login_menu, text="Forgot/Reset Password", command=forgot_password, width=20, height=2, bg="#007bff", fg="white", font=("Arial", 10, "bold"))
-forgot_password_button.grid(row=3, columnspan=2, pady=5)
-
+forgot_password_button.grid(row=3, columnspan=2, pady=10)
 
 # Start the Tkinter event loop
 login_menu.mainloop()
